@@ -1,1 +1,0 @@
-pomozi boze
