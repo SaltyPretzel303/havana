@@ -17,7 +17,7 @@
 (defun gen_pairs (index end)
   (cond
     ((= index end) '())
-    (t (cons (list index #\_) (gen_pairs (1+ index) end)))))
+    (t (cons (list index #\-) (gen_pairs (1+ index) end)))))
 
 (defun gen_row (row dim)
   (cond

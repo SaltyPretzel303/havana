@@ -9,4 +9,4 @@
 (defun get_row(ascii)
   (cond
     ((null ascii) '())
-    (t (- (char-code ascii) 65))))
+    (t (- (char-code (character ascii)) 65))))
