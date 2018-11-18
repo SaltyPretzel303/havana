@@ -8,7 +8,7 @@
     ((null position) '())
     (t (cond
          ((valid_move position) (insert_move player position))
-         (t (princ (append (list "Invalid move -> ") position )))))))
+         (t (princ (append (list "Invalid move -> ") position)))))))
 
 (defun insert_move (player position)
  (cond
@@ -23,7 +23,7 @@
   (cond
     ((and (> (cadr next_position) (car (get_range (get_row (car next_position)) (get_mat_dim matrix))))
          (< (cadr next_position) (cadr (get_range (get_row (car next_position)) (get_mat_dim matrix))))
-         (< (get_row (car next_position)) (1+ (* 2 (get_mat_dim matrix))))) t )
+         (< (get_row (car next_position)) (1+ (* 2 (get_mat_dim matrix))))) t)
     (t '())))
 
 (create_p_mat matrix)
@@ -32,7 +32,7 @@
 (princ #\linefeed)
 (princ #\linefeed)
 
-(make_move #\# (list (read) 4) )
+(make_move #\# (list (read) 0))
 
 (gen_print_matrix matrix)
 ; (setq print_mat (cons
