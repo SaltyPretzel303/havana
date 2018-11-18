@@ -21,9 +21,15 @@
 
 (defun valid_move (next_position)
   (cond
+<<<<<<< HEAD
     ((and (> (cadr next_position) (car (get_range (get_row (car next_position)) (get_mat_dim matrix))))
          (< (cadr next_position) (cadr (get_range (get_row (car next_position)) (get_mat_dim matrix))))
          (< (get_row (car next_position)) (1+ (* 2 (get_mat_dim matrix))))) t)
+=======
+    ((and (>= (cadr next_position) (car (get_range (get_row (car next_position)) (get_mat_dim matrix))))
+         (<= (cadr next_position) (cadr (get_range (get_row (car next_position)) (get_mat_dim matrix))))
+         (< (get_row (car next_position)) (1+ (* 2 (get_mat_dim matrix))))) t )
+>>>>>>> 92e0b6a19d232fb6cbd6ef44719bddb12d69c8dc
     (t '())))
 
 (create_p_mat matrix)
