@@ -23,7 +23,7 @@
   (cond
     ((= row (1- (* 2 dim))) '())
     (t (cons (list (get_ascii row)
-                     (gen_pairs (car (get_range row dim)) (cadr (get_range row dim))))
-               (gen_row (1+ row) dim)))))
+                   (gen_pairs (car (get_range row dim)) (cadr (get_range row dim))))
+             (gen_row (1+ row) dim)))))
 
 (create_matrix 6)

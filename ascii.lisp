@@ -5,3 +5,8 @@
     ((> index 26) '())
     ((< index 0) '())
     (t (nth index ascii))))
+
+(defun get_row(ascii)
+  (cond
+    ((null ascii) '())
+    (t (- (char-code ascii) 65))))

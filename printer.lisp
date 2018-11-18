@@ -1,36 +1,23 @@
 #!/usr/bin/clisp
 
 (load "creator.lisp")
+(load "ascii.lisp")
 
-(setq n 6)
-
-(defun generate_ascii_list(num dim)
+(defun gen_printing_matrix(mat)
   (cond
-   ((zerop dim) '())
-   (t (cons (code-char num) (generate_ascii_list (+ num 1) (- dim 1))))))
+    ((null mat) '())
+    (t (mapcar (lambda(row)
+                      (cons row (create_padding (calc_padding_size (car row) (length mat))))) mat))))
 
-(defun calculate_ending_index (dim counter)
-  (if (< counter dim) (+ counter dim) (- (* dim 2) 1)))
-
-(defun calculate_starting_index (dim counter)
-  (if (< counter dim) '0 (+ 1 (- counter dim))))
-
-(defun init_row(dim letterCounter counter)
-  (cond ((>= counter (calculate_ending_index dim letterCounter)) '())
-        (t (cons (list counter '-) (init_row dim letterCounter (+ 1 counter))))))
-
-(defun init_matrix2 (dim list letterCounter)
+(defun calc_padding_size (ascii dim)
   (cond
-   ((null list) '())
-   (t (cons (list (car list) (init_row dim letterCounter (calculate_starting_index dim letterCounter)))
-              (init_matrix2 dim (cdr list) (+ letterCounter 1))))))
+    ((null ascii) '())
+    (t (abs (- dim (1+ (get_row ascii)))))))
 
-
-(defun generate_matrix(dim)
+(defun create_padding(size)
   (cond
-    ((null dim) '())
-    ((< dim 0) '())
-    (t (setq mat (init_matrix2 dim (generate_ascii_list 65 (- (* dim 2) 1)) '0 )))))
+    ((null size) '())
+    ((= 0 size))
+    (t (append (list #\SPACE) (create_padding (1- size))))))
 
-
-(princ matrix)
+(princ (gen_printing_matrix matrix))
