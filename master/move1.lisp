@@ -18,7 +18,7 @@
     ((= (calculateRow vrsta) (calculateRow (caar matrix))) (cons (cons (caar matrix) (move2 (cadar matrix) vrednost kolona)) (move (cdr matrix) vrednost vrsta kolona)))
     (t (cons (car matrix) (move (cdr matrix) vrednost vrsta kolona)))))
 
-(move matrix 'X (read) (read))
+(move matrix 'X #\B 2)
 
 (print_matrix)
 
