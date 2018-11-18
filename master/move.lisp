@@ -28,29 +28,35 @@
 
 (print_matrix)
 
-(setq position (list #\C 4))
+;;;;; test
 
+(setq position (list (read) 4))
 (princ position)
-
+(princ #\linefeed)
 (princ (car (cdr (assoc (car position) matrix))))
+(princ #\linefeed)
 
-(setf (car (cdr (assoc (car position) matrix)))
-         (mapcar (lambda(element) (cond
-                                    ((= (car element) (car position)) (list (car element) player))
-                                    (t (list (car element) #\#))))
-                 (car (cdr (assoc (character (car position)) matrix)))))
+(princ (setf (cadr (assoc (car position) matrix))
+         (mapcar (lambda(element) (list (car element ) #\#))
+                 (car (cdr (assoc (car position) matrix))))))
 
+(princ #\linefeed)
 (print_matrix)
 
+;;; ovo ispod radi, iznad ne....
 
-; (setq assls '((a (1 2 3)) (b (4 5 6)) (c (7 8 9))))
-;
-; (princ (assoc (setq choice (read)) assls))
-;
-; (princ choice)
-;
-; (princ (list assls #\linefeed))
-;
-; (setf (cadr (assoc choice assls)) (list 9 7 8 ))
-;
-; (princ assls)
+(princ #\linefeed)
+(princ #\linefeed)
+(princ #\linefeed)
+(setq assls '((a (1 2 3)) (b (4 5 6)) (c (7 8 9))))
+
+(princ (assoc (setq choice (read)) assls))
+
+(princ choice)
+(princ #\linefeed)
+
+(princ assls)
+(princ #\linefeed)
+
+(setf (cadr (assoc choice assls)) (list #\# #\# #\# ))
+(princ assls)
