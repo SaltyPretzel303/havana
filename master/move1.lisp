@@ -1,4 +1,4 @@
-
+#!/usr/bin/clisp
 
 (load "printer2.lisp")
 (load "creator.lisp")
@@ -13,7 +13,7 @@
     (t (cons (car l) (move2 (cdr l) vrednost kolona)))))
 
 (defun move(matrix vrednost vrsta kolona)
-  (cond 
+  (cond
     ((null matrix) '())
     ((= (calculateRow vrsta) (calculateRow (caar matrix))) (cons (cons (caar matrix) (move2 (cadar matrix) vrednost kolona)) (move (cdr matrix) vrednost vrsta kolona)))
     (t (cons (car matrix) (move (cdr matrix) vrednost vrsta kolona)))))
@@ -21,9 +21,3 @@
 (move matrix 'X (read) (read))
 
 (print_matrix)
-
-
-
-
-
-
