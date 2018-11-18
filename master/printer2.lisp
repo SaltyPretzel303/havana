@@ -2,17 +2,6 @@
 ;cera
 (load "creator.lisp")
 
-(defun gen_print_matrix1 (mat)
-  (cond
-    ((null mat) '())
-    (t (setq print_mat (mapcar (lambda (row)
-                                       (append
-                                        (create_padding (calc_padding_size (character (car row)) (1+ (floor (length mat) 2))))
-                                        (list (car row))
-                                        (list #\space)
-                                        (extract_values (cadr row))
-                                        (list #\linefeed)))
-                               mat)))))
 (defun gen_print_matrix (mat)
   (cond
     ((null mat) '())
@@ -80,4 +69,5 @@
                        (append (range 0 (get_mat_dim matrix)) (list #\linefeed)))
                  print_mat))
 
-(mapcar (lambda (row) (mapcar (lambda (element) (princ element) ) row) ) print_mat)
+(defun print_matrix()
+  (mapcar (lambda (row) (mapcar (lambda (element) (princ element) ) row) ) print_mat))
