@@ -63,11 +63,23 @@
 
 (gen_print_matrix matrix)
 
+(defun add_first_row (mat)
+  (setq print_mat (cons
+                   (append (create_padding (1+ (calc_padding_size (code-char (1- (char-code #\A))) (get_mat_dim mat))))
+                         (append (range 0 (get_mat_dim mat)) (list #\linefeed)))
+                   mat)))
+
+
+
+(defun create_p_mat (mat)
+  (cond
+    ((null mat) '())
+    (t (add_first_row (gen_print_matrix mat)))))
 ;adds first row with numbers
-(setq print_mat (cons
-                 (append (create_padding (1+ (calc_padding_size (code-char (1- (char-code #\A))) (get_mat_dim matrix))))
-                       (append (range 0 (get_mat_dim matrix)) (list #\linefeed)))
-                 print_mat))
+; (setq print_mat (cons
+;                  (append (create_padding (1+ (calc_padding_size (code-char (1- (char-code #\A))) (get_mat_dim matrix))))
+;                        (append (range 0 (get_mat_dim matrix)) (list #\linefeed)))
+;                  print_mat))
 
 (defun print_matrix()
   (mapcar (lambda (row) (mapcar (lambda (element) (princ element) ) row) ) print_mat))

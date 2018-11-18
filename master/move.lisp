@@ -11,13 +11,13 @@
          (t (princ (append (list "Invalid move -> ") position )))))))
 
 (defun insert_move (player position)
-  (cond
-    ((null position) '())
-    (t (setf (car (cdr (assoc (character (car position)) matrix)))
-             (mapcar (lambda(element) (cond
-                                        ((= (car element) (car position)) (list (car element) player))
-                                        (t element)))
-                     (car (cdr (assoc (character (car position)) matrix))))))))
+ (cond
+   ((null position) '())
+   (t (setf (car (cdr (assoc (car position) matrix)))
+            (mapcar (lambda(element) (cond
+                                       ((= (car element) (cadr position)) (list (car element) player))
+                                       (t element)))
+                    (car (cdr (assoc (car position) matrix))))))))
 
 (defun valid_move (next_position)
   (cond
@@ -26,37 +26,20 @@
          (< (get_row (car next_position)) (1+ (* 2 (get_mat_dim matrix))))) t )
     (t '())))
 
+(create_p_mat matrix)
 (print_matrix)
 
-;;;;; test
-
-(setq position (list (read) 4))
-(princ position)
 (princ #\linefeed)
-(princ (car (cdr (assoc (car position) matrix))))
 (princ #\linefeed)
 
-(princ (setf (cadr (assoc (car position) matrix))
-         (mapcar (lambda(element) (list (car element ) #\#))
-                 (car (cdr (assoc (car position) matrix))))))
+(make_move #\# (list (read) 4) )
 
-(princ #\linefeed)
+(gen_print_matrix matrix)
+; (setq print_mat (cons
+;                  (append (create_padding (1+ (calc_padding_size (code-char (1- (char-code #\A))) (get_mat_dim matrix))))
+;                        (append (range 0 (get_mat_dim matrix)) (list #\linefeed)))
+;                  print_mat))
+
+(create_p_mat matrix)
+
 (print_matrix)
-
-;;; ovo ispod radi, iznad ne....
-
-(princ #\linefeed)
-(princ #\linefeed)
-(princ #\linefeed)
-(setq assls '((a (1 2 3)) (b (4 5 6)) (c (7 8 9))))
-
-(princ (assoc (setq choice (read)) assls))
-
-(princ choice)
-(princ #\linefeed)
-
-(princ assls)
-(princ #\linefeed)
-
-(setf (cadr (assoc choice assls)) (list #\# #\# #\# ))
-(princ assls)

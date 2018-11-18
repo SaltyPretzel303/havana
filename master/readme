@@ -1,0 +1,10 @@
+  File: creator.lisp
+
+    Function: create_matrix (dim)
+      Funkcija koja kreira matricu polja na kojima ce se odvijati igra.
+      Proverava da li je proslednjena dimenzija (dim) veca od 0, ukoliko nije vraca praznu listu dok u suprotnom kreira promenljivu matrix i dodeljuje joj vrednost koja se dobija nakon rekurizvnog poziva funkcije gen_row
+    Function: gen_row (row dim)
+      Fukcija koja kreira jedan red matrice na osnovu proslednjenih argumenata.
+      row- redni broj reda koji se kreira
+      dim- dimenzija matrice odnosno duzina jedne stranice polja za igru
+      Ukoliko prosledjeni broj reda nije veci od dimenzije same matrice 
