@@ -66,10 +66,14 @@
                          (append (range 0 (get_mat_dim mat)) (list #\linefeed)))
                    mat)))
 
-(defun create_p_mat (mat)
-  (cond
-    ((null mat) '())
-    (t (add_first_row (gen_print_matrix mat)))))
+; (defun create_p_mat (mat)
+;   (cond
+;     ((null mat) '())
+;     (t (add_first_row (gen_print_matrix mat)))))
 
 (defun print_matrix()
-  (mapcar (lambda (row) (mapcar (lambda (element) (princ element) ) row) ) print_mat))
+  (mapcar (lambda (row)
+                  (mapcar (lambda (element) (princ element) ) row))
+          (add_first_row (gen_print_matrix matrix))))
+
+(print_matrix)

@@ -21,31 +21,15 @@
 
 (defun valid_move (next_position)
   (cond
-<<<<<<< HEAD
-    ((and (> (cadr next_position) (car (get_range (get_row (car next_position)) (get_mat_dim matrix))))
-         (< (cadr next_position) (cadr (get_range (get_row (car next_position)) (get_mat_dim matrix))))
-         (< (get_row (car next_position)) (1+ (* 2 (get_mat_dim matrix))))) t)
-=======
     ((and (>= (cadr next_position) (car (get_range (get_row (car next_position)) (get_mat_dim matrix))))
          (<= (cadr next_position) (cadr (get_range (get_row (car next_position)) (get_mat_dim matrix))))
-         (< (get_row (car next_position)) (1+ (* 2 (get_mat_dim matrix))))) t )
->>>>>>> 92e0b6a19d232fb6cbd6ef44719bddb12d69c8dc
+         (< (get_row (car next_position)) (1+ (* 2 (get_mat_dim matrix))))) t)
     (t '())))
 
-(create_p_mat matrix)
-(print_matrix)
+(defun move_played (position)
+  (cond
+    ((null position) '())
+    (t ())))
 
-(princ #\linefeed)
-(princ #\linefeed)
-
-(make_move #\# (list (read) 0))
-
-(gen_print_matrix matrix)
-; (setq print_mat (cons
-;                  (append (create_padding (1+ (calc_padding_size (code-char (1- (char-code #\A))) (get_mat_dim matrix))))
-;                        (append (range 0 (get_mat_dim matrix)) (list #\linefeed)))
-;                  print_mat))
-
-(create_p_mat matrix)
-
+(make_move #\# (list (read) (read)))
 (print_matrix)

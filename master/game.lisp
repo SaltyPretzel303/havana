@@ -7,5 +7,11 @@
 (setq player (read))
 (screen:clear-window (screen:make-window))
 (cond
-  ((equalp 'n player) (princ "computer play"))
-  (t (princ "move")))
+  ((equalp 'n player)))(player_move)
+  (t (computer_move))
+
+(defun player_move ()
+  (cond ()))
+
+(defun computer_move()
+  ())
