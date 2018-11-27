@@ -1,7 +1,7 @@
 #!/usr/bin/clisp
 
-(load "creator")
-(load "printer2")
+(load "creator.lisp")
+(load "printer2.lisp")
 
 (defun make_move (player position)
   (cond

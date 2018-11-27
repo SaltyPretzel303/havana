@@ -6,7 +6,7 @@
     ((< index 0) '())
     (t (nth index ascii))))
 
-(defun get_row(ascii)
+(defun get_number(ascii)
   (cond
     ((null ascii) '())
     (t (- (char-code (character ascii)) 65))))

@@ -66,4 +66,4 @@
                   (mapcar (lambda (element) (princ element) ) row))
           (add_first_row (gen_print_matrix matrix))))
 
-(print_matrix)
+; (print_matrix)
