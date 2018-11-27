@@ -26,4 +26,9 @@
                    (gen_pairs (car (get_range row dim)) (cadr (get_range row dim))))
              (gen_row (1+ row) dim)))))
 
+(defun get_mat_dim (mat)
+  (cond
+    ((null mat) '())
+    (t (1+ (floor (length mat) 2)))))
+
 (create_matrix 6)

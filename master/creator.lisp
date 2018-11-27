@@ -27,6 +27,3 @@
              (gen_row (1+ row) dim)))))
 
 (create_matrix 6)
-(princ matrix)
-(princ #\linefeed)
-(princ (cadr (assoc '2 (cadr (assoc '2 matrix)))))
