@@ -7,7 +7,7 @@
     ((null mat) '())
     (t (setq print_mat (mapcar (lambda (row)
                                        (cond
-                                         ((< (get_row (car row)) (1- (get_mat_dim matrix)))
+                                         ((< (car row) (1- (get_mat_dim matrix)))
                                           (construct_upper_half row))
                                          (t (construct_lower_half row))))
                                mat)))))
@@ -17,11 +17,11 @@
     ((null row) '())
     (t (append
         (create_padding (calc_padding_size (car row) (get_mat_dim matrix)))
-        (list (car row))
+        (list (get_ascii (car row)))
         (list #\space)
         (extract_values (cadr row))
         ; (list #\space)
-        (list (+ (get_mat_dim matrix) (get_row (car row))))
+        (list (+ (get_mat_dim matrix) (car row)))
         (list #\linefeed)))))
 
 (defun construct_lower_half (row)
@@ -29,7 +29,7 @@
     ((null row) '())
     (t (append
         (create_padding (calc_padding_size (car row) (get_mat_dim matrix)))
-        (list (car row))
+        (list (get_ascii (car row)))
         (list #\space)
         (extract_values (cadr row))
         (list #\linefeed)))))
