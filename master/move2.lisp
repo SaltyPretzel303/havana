@@ -10,6 +10,7 @@
          ((valid_move position) (insert_move player position))
          (t (princ (append (list "Invalid move -> ") position)))))))
 
+;position-> (row,col)
 (defun insert_move (player position)
  (cond
    ((null position) '())

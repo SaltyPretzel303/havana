@@ -16,7 +16,7 @@
   (cond
     ((null row) '())
     (t (append
-        (create_padding (calc_padding_size (character (car row)) (get_mat_dim matrix)))
+        (create_padding (calc_padding_size (car row) (get_mat_dim matrix)))
         (list (car row))
         (list #\space)
         (extract_values (cadr row))
@@ -28,7 +28,7 @@
   (cond
     ((null row) '())
     (t (append
-        (create_padding (calc_padding_size (character (car row)) (get_mat_dim matrix)))
+        (create_padding (calc_padding_size (car row) (get_mat_dim matrix)))
         (list (car row))
         (list #\space)
         (extract_values (cadr row))
@@ -42,7 +42,7 @@
 (defun calc_padding_size (ascii dim)
   (cond
     ((null ascii) 0)
-    (t (abs (- dim (1+ (get_row ascii)))))))
+    (t (abs (- dim (1+ ascii))))))
 
 (defun create_padding(size)
   (cond
@@ -62,7 +62,7 @@
 
 (defun add_first_row (mat)
   (setq print_mat (cons
-                   (append (create_padding (1+ (calc_padding_size (code-char (1- (char-code #\A))) (get_mat_dim mat))))
+                   (append (create_padding (1+ (calc_padding_size -1 (get_mat_dim mat))))
                          (append (range 0 (get_mat_dim mat)) (list #\linefeed)))
                    mat)))
 
