@@ -3,6 +3,7 @@
 (load "creator.lisp")
 (load "printer.lisp")
 (load "move.lisp")
+(load "ascii.lisp")
 
 (defun next_player(player)
   (cond
@@ -12,7 +13,7 @@
 (defun game(player)
   (let* (
          (po (mapcar 'princ (list "Unesite dve vrednosti: " #\linefeed)))
-         (row (read))
+         (row (get_number (character (read))))
          (column (read))
          (valid (is_valid row column))
          (s_cond (cond
