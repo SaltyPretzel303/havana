@@ -18,23 +18,21 @@
                                 (cons (list (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; lower left
                                       (cons (list (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) '())))))));lower right
 
-(defun remove_clear_corners (symbol ls)
+(defun corners_with_symbol (symbol ls)
   (cond
     ((null ls) '())
     (t (if (equalp (cadr (get_element (car (car ls))(cadr (car ls)))) symbol)
-          (cons (car ls) (remove_clear_corners symbol (cdr ls)))
-         (remove_clear_corners symbol (cdr ls))))))
+          (cons (car ls) (corners_with_symbol symbol (cdr ls)))
+         (corners_with_symbol symbol (cdr ls))))))
 
 (defun get_side_coordinats()
   (setq sides (cons ())))
 
-(defun get_horizontal_sides(row)
+(defun get_horizontal_sides(index)
   ())
 
 (defun get_vertical_sides()
   ())
-
-(defun)
 
 (make_move 'O '0 '0) ; 0 0
 (make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
@@ -47,4 +45,4 @@
 (princ #\linefeed)
 (princ corners)
 (princ #\linefeed)
-(princ (remove_clear_corners 'X corners))
+(princ (corners_with_symbol 'X corners))
