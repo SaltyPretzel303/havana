@@ -25,6 +25,17 @@
           (cons (car ls) (remove_clear_corners symbol (cdr ls)))
          (remove_clear_corners symbol (cdr ls))))))
 
+(defun get_side_coordinats()
+  (setq sides (cons ())))
+
+(defun get_horizontal_sides(row)
+  ())
+
+(defun get_vertical_sides()
+  ())
+
+(defun)
+
 (make_move 'O '0 '0) ; 0 0
 (make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
 (make_move 'O (1- (get_mat_dim matrix)) '0) ; 5 0
