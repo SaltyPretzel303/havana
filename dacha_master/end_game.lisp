@@ -93,7 +93,13 @@
 (make_move 'X '7 '5)
 (print_matrix)
 
-(follow_path_from_to '() '0 '0 '(('10 5)) 'X)
+; (follow_path_from_to '() '0 '0 '(('10 5)) 'X)
+
+(mark_as_visited '0 '0)
+; (princ (append (get_element '0 '0) (list #\#)))
+(princ matrix)
+
+; (mark_as_visited '0 '0)
 
 ;
 ; (princ #\linefeed)

@@ -26,9 +26,34 @@
                    (gen_pairs (car (get_range row dim)) (cadr (get_range row dim))))
              (gen_row (1+ row) dim)))))
 
+; functions for matrix generation ^^^^
+
+; functions helpers
+
 (defun get_mat_dim (mat)
   (cond
     ((null mat) '())
     (t (1+ (floor (length mat) 2)))))
+
+(defun get_row (row)
+  (cond
+    ((null row) '())
+    (t (assoc row matrix))))
+
+(defun get_column(index row)
+  (cond
+    ((null row) '())
+    (t (assoc index (cadr row)))))
+
+(defun get_element(row column)
+  (get_column column (get_row row)))
+
+(defun mark_as_visited(row column)
+  (setf (assoc column (assoc row matrix)) (append (get_element row column) (list #\v))))
+
+(defun is_visited (row column)
+  (if (equalp (car (cddr (get_element row column))) #\v) ; get_elemnt returns-> (1 X 'v') -> 'v' if visited
+    (t)
+    '())) ; field is visited (marked with 'v' on third place)
 
 (create_matrix 6)

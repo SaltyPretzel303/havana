@@ -3,19 +3,6 @@
 (load "creator.lisp")
 (load "printer.lisp")
 
-(defun get_row (row)
-  (cond
-    ((null row) '())
-    (t (assoc row matrix))))
-
-(defun get_column(index row)
-  (cond
-    ((null row) '())
-    (t (assoc index (cadr row)))))
-
-(defun get_element(row column)
-  (get_column column (get_row row)))
-
 (defun is_valid(row column)
   (cond
     ((null (get_row row)) '())
