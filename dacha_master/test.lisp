@@ -1,7 +1,7 @@
 #!/usr/bin/clisp
 
-(setq ls '())
+(setq a '(1 2 3))
 
-(princ (prog
- (cons '1 ls)
- (princ ls)))
+(setq b '(3 5 6))
+
+(princ (set-difference b a))
