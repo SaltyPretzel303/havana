@@ -60,31 +60,51 @@
 (defun follow_path_from_to(row column goals symbol)
   (cond
     ((null goals) '())
-    (t (if (member (list row column) goals)
-         t ; true -> some goal reached
+    (t (if (member (list row column) goals :test 'equal)
+         (progn
+          (princ (list "REACHED GOAL : " row column))
+          t)
          (progn
           (princ (list "visiting: " row column #\linefeed))
           (mark_as_visited row column) ; marks temp node as visited
           (follow_neighbours goals symbol (mark_list_as_selected (not_visited_or_selected_from (fields_with_symbol symbol (get_neighbours row column))))))))))
-         ; gets all neighbours with same symbol, removes visited or selected for visiting, selecte all of them as selected for visiting and sends them as neighbours to ;follow_neighbours function
+         ; gets all neighbours with same symbol, removes visited or selected for visiting, selecte all of them as selected for visiting and sends them as neighbours to ; follow_neighbours function
 
 ; just calls follow_path_from_to for all given neighbours
 (defun follow_neighbours(goals symbol neighbours)
   (cond
     ((null neighbours) '())
-    (t (progn
-        (princ (list "follow_n.. for : " (caar neighbours) (cadar neighbours))) ; for debug
-        (follow_path_from_to (caar neighbours) (cadar neighbours) goals symbol) ; follow next element in path
-        (follow_neighbours goals symbol (cdr neighbours))))))
+    (t (if (null (follow_path_from_to (caar neighbours) (cadar neighbours) goals symbol)) ; follow next element in path if goal is not reached yet
+        (follow_neighbours goals symbol (cdr neighbours))                                 ; t is returned in case of reaching goal
+        t))))
 
-(defun get_side_coordinats()
-  (setq sides (cons ())))
+(defun not_in(checkLs visited)
+  (cond
+    ((null checkLs) '())
+    (t (if (member (car checkLs) visited :test 'equal)
+           (not_in (cdr checkLs) visited) ; visited contains (car checkLs)
+           (cons (car checkLs) (not_in (cdr checkLs) visited))))))
 
-(defun get_horizontal_sides(index)
-  ())
+(defun follow_p (visited row column goals symbol)
+  (cond
+    ((null goals) '())
+    (t (if (member (list row column) goals :test 'equal)
+         (progn
+           (princ (list "GOAL_ON: " row column #\linefeed))
+           t) ; true
+         (let*(
+                (pr (princ (list "visiting: " row column #\linefeed)))
+                (visited (cons (list row column) visited))
+                (selected neighbours)
+                (neigbours (not_in (not_in (fields_with_symbol 'X (get_neighbours row column)) visited) selected))
+                (next_node (follow_n visited selected row column goals symbol neighbours))))))))
 
-(defun get_vertical_sides()
-  ())
+(defun follow_n (visited selected row column goals symbol neighbours)
+  (cond
+    ((null neighbours) '())
+    (t (if (null (follow_p visited selected (caar neighbours) (cadar neighbours) goals symbol))
+         (follow_n visited selected row column goals symbol (cdr neighbours))
+         t))))
 
 (make_move 'X '0 '0) ; 0 0
 (make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
@@ -101,9 +121,16 @@
 (make_move 'X '5 '4)
 (make_move 'X '6 '4)
 (make_move 'X '7 '5)
+(make_move 'X '8 '5)
+
+(make_move 'O '3 '4)
+(make_move 'X '3 '5)
+(make_move 'X '4 '6)
+(make_move 'X '5 '6)
+(make_move 'X '6 '6)
+(make_move 'X '7 '6)
+(make_move 'X '3 '6)
+
 (print_matrix)
 
-
-; (princ (not_visited_or_selected_from (get_neighbours '0 '0)))
-; (princ (mark_list_as_selected (get_neighbours '0 '0)))
-(follow_path_from_to '0 '0 '((7 5)) 'X)
+; (follow_p '() '0 '0 '( (7 5) (3 6) ) 'X)

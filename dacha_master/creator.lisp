@@ -92,4 +92,7 @@
     t
     '()))
 
+(defun reset_flags ()
+  ())
+
 (create_matrix 6)
