@@ -21,7 +21,7 @@
 (defun fields_with_symbol (symbol ls)
   (cond
     ((null ls) '())
-    (t (if (equalp (cadr (get_element (car (car ls))(cadr (car ls)))) symbol)
+    (t (if (equalp (node-value (cadr (get_element (car (car ls))(cadr (car ls))))) symbol)
           (cons (car ls) (fields_with_symbol symbol (cdr ls)))
          (fields_with_symbol symbol (cdr ls))))))
 
@@ -35,22 +35,11 @@
                             (append (return_if_valid (1+ row) column) ; lower left
                                   (append (return_if_valid (1+ row) (1+ column)) '())))))))) ; lower riht
 
+; may be duplicate of creator -> valid
 (defun return_if_valid(row column)
   (if (and (and (>= row 0) (<= row (* 2 (1- (get_mat_dim matrix)))))
        (and (>= column (car (get_range row (get_mat_dim matrix)))) (< column (cadr (get_range row (get_mat_dim matrix))))))
     (list (list row column))))
-
-; (defun follow_path_from_to(visited row column goals symbol)
-;   (cond
-;     ((null goals) '())
-;     (t (if (member (list row column) goals)
-;          (t) ; true -> some goal reached
-;          (mapcar (lambda(neighbour)
-;                         (progn
-;                          (princ (list row column #\linefeed))
-;                          (princ visited)
-;                          (follow_path_from_to (cons (list row column) visited) (car neighbour) (cadr neighbour) goals symbol)))
-;                  (set-difference (fields_with_symbol symbol (get_neighbours row column)) visited))))))
 
 (defun follow_path_from_to(visited row column goals symbol)
   (cond
@@ -93,13 +82,17 @@
 (make_move 'X '7 '5)
 (print_matrix)
 
+; (princ matrix)
+
 ; (follow_path_from_to '() '0 '0 '(('10 5)) 'X)
 
-(mark_as_visited '0 '0)
-; (princ (append (get_element '0 '0) (list #\#)))
-(princ matrix)
 
-; (mark_as_visited '0 '0)
+(setf ls '((1 (1 1) (1 2) (1 3))
+           (2 (2 1) (2 2) (2 3))
+           (3 (3 1) (3 2) (3 3))))
+
+(mark_as_visited '0 '0)
+(princ (is_visited '0 '1))
 
 ;
 ; (princ #\linefeed)

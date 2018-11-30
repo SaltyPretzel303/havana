@@ -34,10 +34,11 @@
         (extract_values (cadr row))
         (list #\linefeed)))))
 
+; changed
 (defun extract_values (row)
   (cond
     ((null row )'())
-    (t (append (list (cadar row)) (list #\space) (extract_values (cdr row))))))
+    (t (append (list (node-value (cadar row))) (list #\space) (extract_values (cdr row))))))
 
 (defun calc_padding_size (ascii dim)
   (cond
