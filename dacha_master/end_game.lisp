@@ -27,7 +27,7 @@
 
 (defun get_neighbours(row column)
   (if (or (null row) (null column))
-    (princ (list "ne radi za1: " row column)); invalid coordinats
+    (princ (list "invalid coordinat in get_neighbours : " row column)); invalid coordinats
     (append (return_if_valid (1- row) (1- column)) ; upper left
           (append (return_if_valid (1- row) column) ; upper right
                 (append (return_if_valid row (1- column)) ; left
@@ -35,26 +35,47 @@
                             (append (return_if_valid (1+ row) column) ; lower left
                                   (append (return_if_valid (1+ row) (1+ column)) '())))))))) ; lower riht
 
-; may be duplicate of creator -> valid
+; may be duplicate of move -> is_valid
 (defun return_if_valid(row column)
   (if (and (and (>= row 0) (<= row (* 2 (1- (get_mat_dim matrix)))))
        (and (>= column (car (get_range row (get_mat_dim matrix)))) (< column (cadr (get_range row (get_mat_dim matrix))))))
     (list (list row column))))
 
-(defun follow_path_from_to(visited row column goals symbol)
+; removes visited fields from given list
+(defun not_visited_from (ls)
+  (cond ((null ls) '())
+    (t (if (not (is_visited (caar ls) (cadar ls)))
+          (cons (car ls) (not_visited_from (cdr ls)))
+          (not_visited_from (cdr ls))))))
+
+; removes visited or selected fields from given list
+(defun not_visited_or_selected_from (ls)
+  (cond ((null ls) '())
+    (t (progn
+            (if (not (or (is_visited (caar ls) (cadar ls))
+                         (is_selected (caar ls) (cadar ls))))
+              (cons (car ls) (not_visited_or_selected_from (cdr ls))) ; not visited or selected for visiting
+              (not_visited_or_selected_from (cdr ls))))))) ; visited or selected for visiting
+
+(defun follow_path_from_to(row column goals symbol)
   (cond
     ((null goals) '())
     (t (if (member (list row column) goals)
-         (t) ; true -> some goal reached
-         (follow_neighbours visited row column goals symbol (set-difference (fields_with_symbol symbol (get_neighbours row column)) visited))))))
+         t ; true -> some goal reached
+         (progn
+          (princ (list "visiting: " row column #\linefeed))
+          (mark_as_visited row column) ; marks temp node as visited
+          (follow_neighbours goals symbol (mark_list_as_selected (not_visited_or_selected_from (fields_with_symbol symbol (get_neighbours row column))))))))))
+         ; gets all neighbours with same symbol, removes visited or selected for visiting, selecte all of them as selected for visiting and sends them as neighbours to ;follow_neighbours function
 
-(defun follow_neighbours(visited row column goals symbol neighbours)
+; just calls follow_path_from_to for all given neighbours
+(defun follow_neighbours(goals symbol neighbours)
   (cond
     ((null neighbours) '())
     (t (progn
-        (princ (list row column))
-        (follow_path_from_to (cons (list row column) visited) (caar neighbours) (cadar neighbours) goals symbol)
-        (follow_neighbours (cons (list row column) visited) (caar neighbours) (cadar neighbours) goals (cdr neighbours))))))
+        (princ (list "follow_n.. for : " (caar neighbours) (cadar neighbours))) ; for debug
+        (follow_path_from_to (caar neighbours) (cadar neighbours) goals symbol) ; follow next element in path
+        (follow_neighbours goals symbol (cdr neighbours))))))
 
 (defun get_side_coordinats()
   (setq sides (cons ())))
@@ -82,20 +103,7 @@
 (make_move 'X '7 '5)
 (print_matrix)
 
-; (princ matrix)
 
-; (follow_path_from_to '() '0 '0 '(('10 5)) 'X)
-
-
-(setf ls '((1 (1 1) (1 2) (1 3))
-           (2 (2 1) (2 2) (2 3))
-           (3 (3 1) (3 2) (3 3))))
-
-(mark_as_visited '0 '0)
-(princ (is_visited '0 '1))
-
-;
-; (princ #\linefeed)
-; (princ corners)
-; (princ #\linefeed)
-; (princ (fields_with_symbol 'X corners))
+; (princ (not_visited_or_selected_from (get_neighbours '0 '0)))
+; (princ (mark_list_as_selected (get_neighbours '0 '0)))
+(follow_path_from_to '0 '0 '((7 5)) 'X)

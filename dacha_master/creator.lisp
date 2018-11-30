@@ -5,7 +5,10 @@
 (defstruct node
   ;column ; [ 0 - dimension ]
   value ; [ '- | 'X | 'O ]
-  visited) ; [ 'v | '() ]
+  status) ; [ 'v | 's |'() ]
+; v- status
+; s- selected for visisting
+; '()- not visited
 
 ; just test ^^^^
 
@@ -28,7 +31,7 @@
     (t (cons (list index (make-node
                            ;:column index
                            :value #\-
-                           :visited '()))
+                           :status '()))
              (gen_pairs (1+ index) end)))))
 
 (defun gen_row (row dim)
@@ -58,19 +61,35 @@
   (cond
     ((null row) '())
     (t (assoc index (cadr row)))))
-; return column with specified index from given row -> '(index X)
+; return column with specified index from given row -> '(index (node :value :status))
 
 (defun get_element(row column)
   (get_column column (get_row row)))
 
-; returns element with given row and column -> '(column X)
+; returns element with given row and column -> '(column (node :value :status))
 
 (defun mark_as_visited(row column)
-  (setf (node-visited (cadr (get_element row column))) #\v))
+  (setf (node-status (cadr (get_element row column))) #\v))
+
+(defun mark_list_as_selected (ls)
+  (progn (princ (list "selecting: " ls))
+         (mapcar (lambda (element)
+                  (progn
+                   (mark_as_selected (car element) (cadr element)) ; marks element ass selected
+                   element)) ; set same value for element in given list
+                 ls)))
 
 (defun is_visited (row column)
-  (if (equalp (node-visited (cadr (get_element row column))) #\v) ; get_elemnt returns-> (1 X 'v') -> 'v' if visited
+  (if (equalp (node-status (cadr (get_element row column))) #\v) ; get_elemnt returns-> (1 (node :value 'X :status 'v)) -> 'v' if visited
       t
-    '())) ; field is visited (marked with 'v' on third place)
+    '()))
+
+(defun mark_as_selected (row column)
+  (setf (node-status (cadr (get_element row column))) #\s))
+
+(defun is_selected (row column)
+  (if (equalp (node-status (cadr (get_element row column))) #\s); get_elemnt returns-> (1 (node :value 'X :status 's)) -> 's' if selected for visiting
+    t
+    '()))
 
 (create_matrix 6)
