@@ -4,12 +4,6 @@
 (load "move.lisp")
 (load "printer.lisp")
 
-(defun find_bridge(symbol row column)
-  ())
-
-(defun find_fork(symbol row column)
-  ())
-
 ; in variable corners sets coordinats of all corners
 (setq corners (cons (list '0 '0) ; upper left
                 (cons (list '0 (1- (get_mat_dim matrix))) ; upper right
@@ -17,6 +11,23 @@
                           (cons (list (1- (get_mat_dim matrix)) (- (* 2 (get_mat_dim matrix)) 2)) ; middle right
                                 (cons (list (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; lower left
                                       (cons (list (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) '())))))));lower right
+
+(defun find_bridge(symbol)
+  (let* (
+         (played_corners (fields_with_symbol symbol corners))
+         (start_point (car played_corners))
+         (goals (cdr played_corners))) ; exclude starting point from goals
+    (cond
+      ((null (follow_path_from_to (car start_point) (cadr start_point) goals symbol))
+       (progn
+         (princ "can't find bridge do something...")))
+      (t (progn
+          (princ "bridge found...."))))))
+
+
+
+(defun find_fork(symbol row column)
+  ())
 
 (defun fields_with_symbol (symbol ls)
   (cond
@@ -66,16 +77,17 @@
           (reset_visited_nodes visited_nodes) ; reseting visited nodes
           t)
          (progn
-          (princ (list "visiting: " row column #\linefeed)) ; debug message
+          (princ (list "visiting: " #\linefeed)) ; debug message
           (mark_as_visited row column) ; marks temp node as visited
-          (follow_neighbours goals symbol (mark_list_as_selected (not_visited_or_selected_from (fields_with_symbol symbol (get_neighbours row column))))))))))
+          (follow_neighbours goals symbol (mark_list_as_selected (not_visited_or_selected_from (fields_with_symbol symbol (get_neighbours row column)))))
+          (reset_visited_nodes visited_nodes))))))
          ; gets all neighbours with same symbol, removes visited or selected for visiting, selecte all of them as selected for visiting and sends them as neighbours to ; follow_neighbours function
 
 ; just calls follow_path_from_to for all given neighbours
 (defun follow_neighbours(goals symbol neighbours)
   (cond
     ((null neighbours) '())
-    (t (if (null (follow_path_from_to (caar neighbours) (cadar neighbours) goals symbol)) ; follow next element in path if goal is not reached yet
+    (t (if (null (follow_path_from_to (caar neighbours) (cadar neighbours) goals symbol)) ; follow next element in path (first from neigbours) if goal is not reached
         (follow_neighbours goals symbol (cdr neighbours))                                 ; t is returned in case of reaching goal
         t))))
 
@@ -135,11 +147,14 @@
 (make_move 'X '6 '6)
 (make_move 'X '7 '6)
 (make_move 'X '3 '6)
+(make_move 'X '9 '5)
 
 (print_matrix)
 
-(follow_path_from_to '0 '0 '( (8 5) (3 6)) 'X)
-; (princ visited_nodes)
+(find_bridge 'X)
+
+
+; (follow_path_from_to '0 '0 '( (0 5) (5 10) (10 5)) 'X)
 
 (princ #\linefeed)
 ; (princ "visited nodes: ")
