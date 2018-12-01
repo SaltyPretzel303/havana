@@ -11,6 +11,9 @@
                                 (cons (list (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; lower left
                                       (cons (list (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) '())))))));lower right
 
+; vraca T ako za prosledjeni simbol postoji bridge
+(defun bridge (symbol)
+    (has_bridge (fields_with_symbol symbol corners)))
 
 ;vraca T ukoliko postoji put izmedju bilo koja 2 cornera iz skupa
 (defun has_bridge(ls)
@@ -18,6 +21,7 @@
         ((equalp (length ls) 1) '())
         (t (if (null (check_bridge (list (car ls)) (cdr ls) '())) (has_bridge (cdr ls)) 't))))
 
+;filtirira listu i ostavlja samo elemente prosledjenog simbola
 (defun fields_with_symbol (symbol ls)
   (cond
     ((null ls) '())
@@ -25,6 +29,7 @@
           (cons (car ls) (fields_with_symbol symbol (cdr ls)))
          (fields_with_symbol symbol (cdr ls))))))
 
+;vraca listu suseda prosledjenog polja
 (defun get_neighbours(row column)
   (if (or (null row) (null column))
     (princ (list "ne radi za1: " row column)); invalid coordinats
@@ -71,30 +76,31 @@
 
 ;TESTING
 
-(make_move 'X '0 '0) ; 0 0
-(make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
-(make_move 'O (1- (get_mat_dim matrix)) '0) ; 5 0
-(make_move 'X (1- (get_mat_dim matrix)) (- (* 2 (get_mat_dim matrix)) 2)) ; 5 10
-(make_move 'X (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; 10 5
-(make_move 'O (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) ; 10 10
-(make_move 'X '1 '1)
-(make_move 'X '2 '3)
-(make_move 'X '3 '3)
-(make_move 'X '2 '2)
-(make_move 'X '4 '3)
-(make_move 'X '4 '4)
+;(make_move 'X '0 '0) ; 0 0
+;(make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
+;(make_move 'O (1- (get_mat_dim matrix)) '0) ; 5 0
+;(make_move 'X (1- (get_mat_dim matrix)) (- (* 2 (get_mat_dim matrix)) 2)) ; 5 10
+;(make_move 'X (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; 10 5
+;(make_move 'O (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) ; 10 10
+;(make_move 'X '1 '1)
+;(make_move 'X '2 '3)
+;(make_move 'X '3 '3)
+;(make_move 'X '2 '2)
+;(make_move 'X '4 '3)
+;(make_move 'X '4 '4)
 ;(make_move 'X '5 '4)
-(make_move 'X '6 '4)
-(make_move 'X '7 '5)
-(make_move 'X '7 '6)
-(make_move 'X '7 '7)
-(make_move 'X '8 '5)
-(make_move 'X '6 '7)
-(make_move 'X '5 '7)
-(make_move 'X '5 '8)
-(make_move 'X '5 '9)
-(make_move 'X '9 '5)
-(print_matrix)
+;(make_move 'X '6 '4)
+;(make_move 'X '7 '5)
+;(make_move 'X '7 '6)
+;(make_move 'X '7 '7)
+;(make_move 'X '8 '5)
+;(make_move 'X '6 '7)
+;(make_move 'X '5 '7)
+;(make_move 'X '5 '8)
+;(make_move 'X '5 '9)
+;(make_move 'X '9 '5)
+;(print_matrix)
+;(princ (bridge 'X))
 ;(trace add_neighbours)
 ;(untrace get_element)
 ;(trace check_bridge)
