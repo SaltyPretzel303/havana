@@ -68,7 +68,7 @@
               (cons (car ls) (not_visited_or_selected_from (cdr ls))) ; not visited or selected for visiting
               (not_visited_or_selected_from (cdr ls))))))) ; visited or selected for visiting
 
-(defun follow_path_from_to(row column goals symbol)
+(defun follow_path_from_to(row column goals symbol depth)
   (cond
     ((null goals) '())
     (t (if (member (list row column) goals :test 'equal)
@@ -77,18 +77,26 @@
           (reset_visited_nodes visited_nodes) ; reseting visited nodes
           t)
          (progn
-          (princ (list "visiting: " #\linefeed)) ; debug message
+          (princ (list "visiting: " row column #\linefeed)) ; debug message
           (mark_as_visited row column) ; marks temp node as visited
-          (follow_neighbours goals symbol (mark_list_as_selected (not_visited_or_selected_from (fields_with_symbol symbol (get_neighbours row column)))))
-          (reset_visited_nodes visited_nodes))))))
-         ; gets all neighbours with same symbol, removes visited or selected for visiting, selecte all of them as selected for visiting and sends them as neighbours to ; follow_neighbours function
+          (let* (
+                  (ret_val (follow_neighbours goals symbol (mark_list_as_selected (not_visited_or_selected_from (fields_with_symbol symbol (get_neighbours row column))))))
+                  (if (depth)
+                    () ; true
+                    ()))))))))
+          ; gets all neighbours with same symbol, removes visited or selected for visiting, selecte all of them as selected for visiting and sends them as neighbours to
+          ; follow_neighbours function
 
 ; just calls follow_path_from_to for all given neighbours
 (defun follow_neighbours(goals symbol neighbours)
   (cond
     ((null neighbours) '())
     (t (if (null (follow_path_from_to (caar neighbours) (cadar neighbours) goals symbol)) ; follow next element in path (first from neigbours) if goal is not reached
-        (follow_neighbours goals symbol (cdr neighbours))                                 ; t is returned in case of reaching goal
+        (progn
+         (reset_node (caar neighbours) (cadar neighbours))
+         (princ (list "manualRem: " (car neighbours)))
+         (setq visited_nodes (remove_node_from (car neighbours) visited_nodes))
+         (follow_neighbours goals symbol (cdr neighbours)))                                 ; t is returned in case of reaching goal
         t))))
 
 (defun not_in(checkLs visited)
@@ -147,17 +155,17 @@
 (make_move 'X '6 '6)
 (make_move 'X '7 '6)
 (make_move 'X '3 '6)
-(make_move 'X '9 '5)
+; (make_move 'X '9 '5)
 
 (print_matrix)
 
 (find_bridge 'X)
+(princ visited_nodes)
 
 
 ; (follow_path_from_to '0 '0 '( (0 5) (5 10) (10 5)) 'X)
 
-(princ #\linefeed)
-; (princ "visited nodes: ")
-; (reset_visited_nodes visited_nodes)
-; (princ #\linefeed)
-; (princ (list "visited: " visited_nodes))
+; (princ (list "visited" visited_nodes))
+
+; (setq a '((1 2) (2 3 ) (3 4)))
+; (princ (remove (list 1 2) a :test 'equal))

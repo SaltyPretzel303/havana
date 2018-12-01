@@ -87,6 +87,9 @@
 (defun reset_node (row column)
   (setf (node-status (cadr (get_element row column))) '())) ; set attribute :status on '() - neutral, not visited or selcted
 
+(defun remove_node_from (node target_list)
+  (remove node target_list :test 'equal))
+
 (defun reset_visited_nodes(visited)
   (cond
     ((null visited) (setq visited_nodes '())) ; clear visited_nodes in the end
