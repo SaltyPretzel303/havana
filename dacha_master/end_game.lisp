@@ -18,7 +18,7 @@
          (start_point (car played_corners))
          (goals (cdr played_corners))) ; exclude starting point from goals
     (cond
-      ((null (follow_path_from_to (car start_point) (cadr start_point) goals symbol))
+      ((null (follow_path_from_to (car start_point) (cadr start_point) goals symbol '0))
        (progn
          (princ "can't find bridge do something...")))
       (t (progn
@@ -80,23 +80,23 @@
           (princ (list "visiting: " row column #\linefeed)) ; debug message
           (mark_as_visited row column) ; marks temp node as visited
           (let* (
-                  (ret_val (follow_neighbours goals symbol (mark_list_as_selected (not_visited_or_selected_from (fields_with_symbol symbol (get_neighbours row column))))))
-                  (if (depth)
-                    () ; true
-                    ()))))))))
+                  (ret_val (follow_neighbours goals symbol (mark_list_as_selected (not_visited_or_selected_from (fields_with_symbol symbol (get_neighbours row column)))) depth))
+                  (if_value (if (equal depth '0)
+                              (reset_visited_nodes visited_nodes)))) ; if all recursions are done (back to inital call (depth=0)) reset all visited nodes
+            ret_val)))))) ; return value of follow_path_from_to recursive call
+
+          ;(mark_list_as_selected (not_visited_or_selected_from (fields_with_symbol symbol (get_neighbours row column))))
           ; gets all neighbours with same symbol, removes visited or selected for visiting, selecte all of them as selected for visiting and sends them as neighbours to
           ; follow_neighbours function
 
 ; just calls follow_path_from_to for all given neighbours
-(defun follow_neighbours(goals symbol neighbours)
+(defun follow_neighbours(goals symbol neighbours depth)
   (cond
     ((null neighbours) '())
-    (t (if (null (follow_path_from_to (caar neighbours) (cadar neighbours) goals symbol)) ; follow next element in path (first from neigbours) if goal is not reached
+    (t (if (null (follow_path_from_to (caar neighbours) (cadar neighbours) goals symbol (1+ depth))) ; follow next element in path (first from neigbours) if goal is not reached
         (progn
-         (reset_node (caar neighbours) (cadar neighbours))
-         (princ (list "manualRem: " (car neighbours)))
          (setq visited_nodes (remove_node_from (car neighbours) visited_nodes))
-         (follow_neighbours goals symbol (cdr neighbours)))                                 ; t is returned in case of reaching goal
+         (follow_neighbours goals symbol (cdr neighbours) depth))                                 ; t is returned in case of reaching goal
         t))))
 
 (defun not_in(checkLs visited)
@@ -155,7 +155,7 @@
 (make_move 'X '6 '6)
 (make_move 'X '7 '6)
 (make_move 'X '3 '6)
-; (make_move 'X '9 '5)
+(make_move 'X '9 '5)
 
 (print_matrix)
 
