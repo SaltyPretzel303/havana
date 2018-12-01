@@ -62,10 +62,11 @@
     ((null goals) '())
     (t (if (member (list row column) goals :test 'equal)
          (progn
-          (princ (list "REACHED GOAL : " row column))
+          (princ (list "REACHED GOAL : " row column)) ; debug message
+          (reset_visited_nodes visited_nodes) ; reseting visited nodes
           t)
          (progn
-          (princ (list "visiting: " row column #\linefeed))
+          (princ (list "visiting: " row column #\linefeed)) ; debug message
           (mark_as_visited row column) ; marks temp node as visited
           (follow_neighbours goals symbol (mark_list_as_selected (not_visited_or_selected_from (fields_with_symbol symbol (get_neighbours row column))))))))))
          ; gets all neighbours with same symbol, removes visited or selected for visiting, selecte all of them as selected for visiting and sends them as neighbours to ; follow_neighbours function
@@ -84,6 +85,8 @@
     (t (if (member (car checkLs) visited :test 'equal)
            (not_in (cdr checkLs) visited) ; visited contains (car checkLs)
            (cons (car checkLs) (not_in (cdr checkLs) visited))))))
+
+; same as follow_path_from_to with local lists
 
 (defun follow_p (visited row column goals symbol)
   (cond
@@ -105,6 +108,8 @@
     (t (if (null (follow_p visited selected (caar neighbours) (cadar neighbours) goals symbol))
          (follow_n visited selected row column goals symbol (cdr neighbours))
          t))))
+
+; test ends here
 
 (make_move 'X '0 '0) ; 0 0
 (make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
@@ -133,4 +138,11 @@
 
 (print_matrix)
 
-; (follow_p '() '0 '0 '( (7 5) (3 6) ) 'X)
+(follow_path_from_to '0 '0 '( (8 5) (3 6)) 'X)
+; (princ visited_nodes)
+
+(princ #\linefeed)
+; (princ "visited nodes: ")
+; (reset_visited_nodes visited_nodes)
+; (princ #\linefeed)
+; (princ (list "visited: " visited_nodes))

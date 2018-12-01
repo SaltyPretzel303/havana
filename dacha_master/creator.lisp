@@ -10,7 +10,16 @@
 ; s- selected for visisting
 ; '()- not visited
 
-; just test ^^^^
+; REPRESENTATION
+#|
+  nodeStruct:
+        -value ['- | 'X | 'O]
+        -status ['() | 'v | 's]
+
+               ----------------- list of columns ---------------
+  ((rowIndex (( columnIndex nodeStruct) (columnIndex nodeStruct)))
+   (rowIndex  --||--))
+|#
 
 (defun create_matrix (dim)
   (cond
@@ -29,7 +38,6 @@
   (cond
     ((= index end) '())
     (t (cons (list index (make-node
-                           ;:column index
                            :value #\-
                            :status '()))
              (gen_pairs (1+ index) end)))))
@@ -65,11 +73,28 @@
 
 (defun get_element(row column)
   (get_column column (get_row row)))
+; returns element with given row and column -> '(columnIndex (node :value :status))
 
-; returns element with given row and column -> '(column (node :value :status))
+; functions for treversing nodes
 
 (defun mark_as_visited(row column)
-  (setf (node-status (cadr (get_element row column))) #\v))
+  (progn
+    (if (boundp 'visited_nodes) ; boudnp checks does variable exists (is defined)
+       (setf visited_nodes (cons (list row column) visited_nodes)); if exists append given cell (list row column)
+       (setq visited_nodes (cons (list row column) '()))) ; if doesn't exists (first call)
+    (setf (node-status (cadr (get_element row column))) #\v))) ; mark node as visited (#\v)
+
+(defun reset_node (row column)
+  (setf (node-status (cadr (get_element row column))) '())) ; set attribute :status on '() - neutral, not visited or selcted
+
+(defun reset_visited_nodes(visited)
+  (cond
+    ((null visited) (setq visited_nodes '())) ; clear visited_nodes in the end
+    (t (progn
+          (princ (list "reseting: " (car visited))) ; debug message
+          (reset_node (caar visited) (cadar visited)) ;
+          (reset_visited_nodes (cdr visited)))))) ; call same function for the rest of list without first element
+
 
 (defun mark_list_as_selected (ls)
   (progn (princ (list "selecting: " ls))
@@ -91,8 +116,5 @@
   (if (equalp (node-status (cadr (get_element row column))) #\s); get_elemnt returns-> (1 (node :value 'X :status 's)) -> 's' if selected for visiting
     t
     '()))
-
-(defun reset_flags ()
-  ())
 
 (create_matrix 6)
