@@ -14,7 +14,6 @@
                                       (cons (list (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) '())))))));lower right
                                     
 ; ==============================================================================
-; dacha
 (defun go_down_left (start end)
   (cond ((equal start end) '())
         (t (cons start (go_down_left (list (+ 1 (car start)) (cadr start)) end)))))
