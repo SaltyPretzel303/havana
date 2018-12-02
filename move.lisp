@@ -36,10 +36,25 @@
 
 (defun next_state(prev_state symbol row column)
   (let* (
-         (new_state prev_state)
+         (new_state (copy-tree prev_state))
          (changed_cell (setf (cadr (assoc column (cadr (assoc row new_state)))) symbol)))
     new_state))
 
-; (princ (next_state matrix #\X '0 '0))
-; (princ #\linefeed)
-; (princ matrix)
+(defun possible_moves (prev_state symbol)
+  (traverse_matrix prev_state prev_state symbol))
+
+(defun traverse_matrix (rows prev_state symbol)
+  (cond
+    ((null rows) '())
+    (t (append
+        (traverse_row (caar rows) (cadar rows) prev_state symbol)
+        (traverse_matrix (cdr rows) prev_state symbol)))))
+
+(defun traverse_row (row_index row prev_state symbol)
+  (cond
+    ((null row) '())
+    (t (if (equalp (cadar row) #\-)
+         (cons (next_state prev_state symbol row_index (caar row)) (traverse_row row_index (cdr row) prev_state symbol))
+         (traverse_row row_index (cdr row) prev_state symbol)))))
+
+; (princ (possible_moves matrix #\X))
