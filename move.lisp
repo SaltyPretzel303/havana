@@ -40,6 +40,6 @@
          (changed_cell (setf (cadr (assoc column (cadr (assoc row new_state)))) symbol)))
     new_state))
 
-(princ (next_state matrix #\X '0 '0))
-(princ #\linefeed)
-(princ matrix)
+; (princ (next_state matrix #\X '0 '0))
+; (princ #\linefeed)
+; (princ matrix)
