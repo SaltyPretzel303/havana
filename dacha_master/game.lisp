@@ -25,7 +25,7 @@
                                        (go (game player)))))
                   (t (let* ( ; valid move
                             (mmo (make_move player row column)) ; make move
-                            (bridge_created (bridge player)) ; check for bridge
+                            (bridge_created (check_bridge player)) ; check for bridge
                             (next (if (not (null bridge_created))
                                     (progn ; bridge created, end game
                                       (screen:clear-window (screen:make-window))

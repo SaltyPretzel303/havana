@@ -36,17 +36,16 @@
 ; ==============================================================================
 
 ; vraca T ako za prosledjeni simbol postoji bridge
-(defun bridge (symbol)
+(defun check_bridge (symbol)
     (has_bridge (fields_with_symbol symbol corners)))
 
 ;vraca T ukoliko postoji put izmedju bilo koja 2 cornera iz skupa
 (defun has_bridge(ls)
   (cond ((null ls) '())
         ((equalp (length ls) 1) '())
-        (t (if (null (check_bridge (list (car ls)) (cdr ls) '()))
+        (t (if (null (bridge_traversal (list (car ls)) (cdr ls) '()))
              (has_bridge (cdr ls))
              't))))
-; ==============================================================================
 
 ;filtirira listu i ostavlja samo elemente prosledjenog simbola
 (defun fields_with_symbol (symbol ls)
@@ -90,18 +89,18 @@
         (t (if (member (car startList) endList :test 'equalp) (car startList) (compare_lists (cdr startList) endList)))))
 
 ;vratice T ako postoji put od start polja do nekog od end polja
-(defun check_bridge (start end visited)
+(defun bridge_traversal (start end visited)
   (cond
     ((compare_lists start end) 't)
     ((null start) '())
     (t (let* ((visited1 (cons (car start) visited))
               (neighbours (add_neighbours (car start) (append start visited1)))
               (start1 (append (cdr start) neighbours))
-              (is_connected (check_bridge start1 end visited1)))
+              (is_connected (bridge_traversal start1 end visited1)))
             is_connected))))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ==============================================================================
 
 (defun fork(played)
     (if (>= (number_of_walls_hit (get_fork_tree played)) 3) (car played) '()))
@@ -127,7 +126,7 @@
 (defun ring (symbol row colum)
   t)
 
-(defun has_ring)
+(defun has_ring())
 
 ; ==============================================================================
 
@@ -161,17 +160,20 @@
 ; (trace traversal)
 ; (princ (get_fork_tree '(5 4)))
 
+(print_matrix)
+(princ sides)
+
 ;(print_matrix)
 ;(princ (bridge 'X))
 ;(trace add_neighbours)
 ;(untrace get_element)
-;(trace check_bridge)
-;(princ (check_bridge '((0 0)) '((5 10) (10 5)) '()))
+;(trace bridge_traversal)
+;(princ (bridge_traversal '((0 0)) '((5 10) (10 5)) '()))
 
 ;(princ corners)
 ;(princ #\linefeed)
 ;(princ (fields_with_symbol 'X corners))
-;(trace check_bridge)
+;(trace bridge_traversal)
 ;(has_bridge (fields_with_symbol 'X corners))
 
 
