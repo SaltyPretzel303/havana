@@ -4,12 +4,17 @@
 (load "move.lisp")
 (load "printer.lisp")
 
-(setq corners (cons (list '0 '0) ; upper left
+(setf corners (cons (list '0 '0) ; upper left
                 (cons (list '0 (1- (get_mat_dim matrix))) ; upper right
                     (cons (list (1- (get_mat_dim matrix)) '0) ; middle left
                           (cons (list (1- (get_mat_dim matrix)) (- (* 2 (get_mat_dim matrix)) 2)) ; middle right
                                 (cons (list (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; lower left
                                       (cons (list (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) '())))))));lower right
+
+(setf ul_wall (set_upper_left_wall '(1 0)))
+
+
+
 
 ; vraca T ako za prosledjeni simbol postoji bridge
 (defun bridge (symbol)
@@ -74,6 +79,29 @@
             is_connected))))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun fork(played)
+    (if (>= (number_of_walls_hit (get_fork_tree played)) 3) (car played) '()))
+
+(defun get_fork_tree (played)
+    (traversal (list played) '()))
+
+(defun traversal (start visited)
+    (cond ((null start) visited)
+          (t (let* ((visited1 (cons (car start) visited))
+                    (neighbours (add_neighbours (car start) (append start visited1)))
+                    (start1 (append (cdr start) neighbours))
+                    (tree (traversal start1 visited1)))
+                  tree))))
+
+
+(defun number_of_walls_hit (ls)
+    '0)
+
+
+
+
 ;TESTING
 
 ;(make_move 'X '0 '0) ; 0 0
@@ -99,6 +127,9 @@
 ;(make_move 'X '5 '8)
 ;(make_move 'X '5 '9)
 ;(make_move 'X '9 '5)
+
+(trace traversal)
+(princ (get_fork_tree '(5 4)))
 ;(print_matrix)
 ;(princ (bridge 'X))
 ;(trace add_neighbours)
