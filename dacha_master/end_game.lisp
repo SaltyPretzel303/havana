@@ -67,6 +67,13 @@
          (cons (car ls) (symbol_and_neutral symbol (cdr ls)))
          (symbol_and_neutral symbol (cdr ls))))))
 
+(defun neutral_from (ls)
+  (cond
+    ((null ls) '())
+    (t (if (equalp (node-value (cadr (get_element (car (car ls))(cadr (car ls))))) #\-)
+          (cons (car ls) (neutral_from (cdr ls)))
+         (neutral_from (cdr ls))))))
+
 (defun get_neighbours(row column)
   (if (or (null row) (null column))
     (princ (list "invalid coordinat in get_neighbours : " row column)); invalid coordinats
@@ -133,7 +140,7 @@
 ; ==============================================================================
 
 (defun ring (symbol row column)
-  (find_ring symbol (symbol_and_neutral symbol (get_neighbours row column))))
+  (find_ring symbol (neutral_from (get_neighbours row column))))
 
 (defun find_ring(symbol potential)
   (cond
@@ -142,27 +149,34 @@
       (reset_visited_nodes visited_nodes)
       '()))
     (t (if (check_ring_from symbol (caar potential) (cadar potential))
-         t
-         (find_ring symbol (not_visited_from (cdr potential)))))))
+          (progn
+           (reset_visited_nodes visited_nodes)
+            t)
+          (progn
+            (princ (list "not visited neutral: " (not_visited_from (cdr potential))))
+            (find_ring symbol (not_visited_from (cdr potential))))))))
 
 (defun check_ring_from(symbol row column)
   (if (equal (node-value (cadr (get_element row column))) symbol)
         (progn
+         (princ (list "found " symbol " on: " row column #\linefeed))
          (mark_as_visited row column)
           t)
         (if (is_on_side row column)
               (progn
+               (princ (list "got on side on: " row column #\linefeed))
                (mark_as_visited row column)
                '())
               (progn
-                (mark_as_visited row_column)
-                (check_surrounding symbol (symbol_and_neutral symbol (not_visited_from (get_neighbours row column))))))))
+                (princ (list "visiting neighbours from: " row column))
+                (mark_as_visited row column)
+                (check_surrounding symbol (symbol_and_neutral symbol (not_visited_from (get_neighbours row column))) '())))))
 
-(defun check_surrounding (symbol neighbours)
+(defun check_surrounding (symbol neighbours last)
   (cond
-    ((null neighbours) '())
+    ((null neighbours) last)
     (t (if (not (null (check_ring_from symbol (caar neighbours) (cadar neighbours))))
-         (check_surrounding symbol (not_visited_from (cdr neighbours)))
+         (check_surrounding symbol (not_visited_from (cdr neighbours)) t)
          '()))))
 
 (defun is_on_side(row column)
@@ -186,7 +200,7 @@
 (make_move 'X '7 '5)
 (make_move 'X '8 '5)
 
-(make_move 'O '3 '4)
+(make_move 'X '3 '4)
 (make_move 'X '3 '5)
 (make_move 'X '4 '6)
 (make_move 'X '5 '6)
@@ -197,9 +211,9 @@
 
 (print_matrix)
 
-(trace check_ring_from)
+(princ (ring 'X '6 '4))
 
-(princ (ring 'X '0 '0))
+
 
 ; (find_bridge 'X)
 ; (princ visited_nodes)
