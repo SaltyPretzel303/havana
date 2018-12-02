@@ -36,6 +36,13 @@
           (cons (car ls) (fields_with_symbol symbol (cdr ls)))
          (fields_with_symbol symbol (cdr ls))))))
 
+(defun symbol_and_neutral (symbol ls)
+  (cond
+    ((null ls) '())
+    (t (if (not (equalp (node-value (cadr (get_element (car(car ls)) (cadr (car ls))))) (next_player symbol)))
+         (cons (car ls) (symbol_and_neutral symbol (cdr ls)))
+         (symbol_and_neutral symbol (cdr ls))))))
+
 (defun get_neighbours(row column)
   (if (or (null row) (null column))
     (princ (list "invalid coordinat in get_neighbours : " row column)); invalid coordinats
@@ -128,6 +135,46 @@
     (t (if (null (follow_p visited selected (caar neighbours) (cadar neighbours) goals symbol))
          (follow_n visited selected row column goals symbol (cdr neighbours))
          t))))
+
+; ==============================================================================
+
+(defun ring (symbol row column)
+  (find_ring symbol (symbol_and_neutral symbol (get_neighbours row column))))
+
+(defun find_ring(symbol potential)
+  (cond
+    ((null potential)
+     (progn
+      (reset_visited_nodes visited_nodes)
+      '()))
+    (t (if (check_ring_from symbol (caar potential) (cadar potential))
+         t
+         (find_ring (not_visited (cdr potential)))))))
+
+(defun check_ring_from(symbol row column)
+  (if (equal (node-value (cadr (get_element row column))) symbol)
+        (progn
+         (mark_as_visited row column)
+          t)
+        (if (is_on_side row column)
+              (progn
+               (mark_as_visited row colum)
+               '())
+              (progn
+                (mark_as_visited row_colum)
+                (check_surrounding symbol (symbol_and_neutral symbol (not_visited (get_neighbours row column))))))))
+
+(defun check_surrounding (symbol neighbours)
+  (cond
+    ((null neighbours) '())
+    (t (if (not (null (check_ring_from symbol (caar neighbours) (cadar neighbours))))
+         (check_surrounding symbol (not_visited (cdr neighbours)))
+         '()))))
+
+(defun is_on_side(row column)
+  (member (list row column) sides :test 'equal))
+
+; ==============================================================================
 
 ; test ends here
 
