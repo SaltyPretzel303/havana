@@ -27,7 +27,7 @@
                             (mmo (make_move symbol row column)) ; make move
                             (bridge_created (check_bridge symbol)) ; check for bridge
                             (fork_created (check_fork (list row column)))
-                            (ring_created '())
+                            (ring_created (check_ring (list row column)))
                             (next (if (or (not (null bridge_created)) (not (null fork_created)) (not (null ring_created)))
                                     (progn ; bridge created, end game
                                       (screen:clear-window (screen:make-window))
