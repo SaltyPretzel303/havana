@@ -12,28 +12,7 @@
                           (cons (list (1- (get_mat_dim matrix)) (- (* 2 (get_mat_dim matrix)) 2)) ; middle right
                                 (cons (list (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; lower left
                                       (cons (list (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) '())))))));lower right
-; ==============================================================================
-; cera
-(defun row_coordinates(index row)
-  (cond
-    ((null row) '())
-    (t (progn
-         (cons (list index (caar row)) (row_coordinates index (cdr row)))))))
-
-(defun side_coordinates (row_index)
-  (if (< row_index (* 2 (1- (get_mat_dim matrix))))
-    (let* (
-            (row (cadr (get_row row_index)))
-            (first_index (car (first row)))
-            (last_index (car (car (last row))))) ; last returns '(last_element) -> (car (last list)) = last_element
-          (append (list (list row_index first_index) (list row_index last_index)) (side_coordinates (1+ row_index))))
-    '()))
-
-(setf sides (let (
-                  (top (row_coordinates 0 (cadr (get_row 0))))
-                  (bottom (row_coordinates (* 2 (1- (get_mat_dim matrix ))) (cadr (get_row (* 2 (1- (get_mat_dim matrix)))))))
-                  (left_right (side_coordinates 1)))
-              (append top left_right bottom)))
+                                    
 ; ==============================================================================
 ; dacha
 (defun go_down_left (start end)
