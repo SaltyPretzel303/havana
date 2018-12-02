@@ -4,6 +4,8 @@ tim Camila Cabello
 Danilo Vulović
 Dušan Zamahajev
 Nemanja Milosavljević
+(testirano na linuxu sa clisp)
+
 Reprezentacije table za igru:
 
 (
