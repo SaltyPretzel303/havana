@@ -11,7 +11,7 @@
                                 (cons (list (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; lower left
                                       (cons (list (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) '())))))));lower right
 
-(setf ul_wall (set_upper_left_wall '(1 0)))
+; (setf ul_wall (set_upper_left_wall '(1 0)))
 
 
 
@@ -67,9 +67,9 @@
   (cond ((null startList) '())
         (t (if (member (car startList) endList :test 'equalp) (car startList) (compare_lists (cdr startList) endList)))))
 
-;vratice T ako postoji put od start polja do nekog od end polja 
+;vratice T ako postoji put od start polja do nekog od end polja
 (defun check_bridge (start end visited)
-  (cond 
+  (cond
     ((compare_lists start end) 't)
     ((null start) '())
     (t (let* ((visited1 (cons (car start) visited))
@@ -128,8 +128,9 @@
 ;(make_move 'X '5 '9)
 ;(make_move 'X '9 '5)
 
-(trace traversal)
-(princ (get_fork_tree '(5 4)))
+; (trace traversal)
+; (princ (get_fork_tree '(5 4)))
+
 ;(print_matrix)
 ;(princ (bridge 'X))
 ;(trace add_neighbours)

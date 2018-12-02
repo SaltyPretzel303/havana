@@ -1,7 +1,8 @@
 #!/usr/bin/clisp
 
-(setq a '(1 2 3))
-
-(setq b '(3 5 6))
-
-(princ (set-difference b a))
+(let* (
+       (a '(1 2 3 4))
+       (b '(5 6 7 8))
+       (l (let* (
+                 (c '(10 11 12 13))))))
+  (princ a))
