@@ -13,6 +13,29 @@
                                 (cons (list (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; lower left
                                       (cons (list (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) '())))))));lower right
 
+(defun row_coordinates(index row)
+  (cond
+    ((null row) '())
+    (t (progn
+         (cons (list index (caar row)) (row_coordinates index (cdr row)))))))
+
+(defun side_coordinates (row_index)
+  (if (< row_index (* 2 (1- (get_mat_dim matrix))))
+    (let* (
+            (row (cadr (get_row row_index)))
+            (first_index (car (first row)))
+            (last_index (car (car (last row))))) ; last returns '(last_element) -> (car (last list)) = last_element
+          (append (list (list row_index first_index) (list row_index last_index)) (side_coordinates (1+ row_index))))
+    '()))
+
+(setf sides (let (
+                  (top (row_coordinates 0 (cadr (get_row 0))))
+                  (bottom (row_coordinates (* 2 (1- (get_mat_dim matrix ))) (cadr (get_row (* 2 (1- (get_mat_dim matrix)))))))
+                  (left_right (side_coordinates 1)))
+              (append top left_right bottom)))
+
+
+
 (defun find_bridge(symbol)
   (let* (
          (played_corners (fields_with_symbol symbol corners))
@@ -107,36 +130,6 @@
          (follow_neighbours goals symbol (cdr neighbours) depth))                                 ; t is returned in case of reaching goal
         t))))
 
-(defun not_in(checkLs visited)
-  (cond
-    ((null checkLs) '())
-    (t (if (member (car checkLs) visited :test 'equal)
-           (not_in (cdr checkLs) visited) ; visited contains (car checkLs)
-           (cons (car checkLs) (not_in (cdr checkLs) visited))))))
-
-; same as follow_path_from_to with local lists
-
-(defun follow_p (visited row column goals symbol)
-  (cond
-    ((null goals) '())
-    (t (if (member (list row column) goals :test 'equal)
-         (progn
-           (princ (list "GOAL_ON: " row column #\linefeed))
-           t) ; true
-         (let*(
-                (pr (princ (list "visiting: " row column #\linefeed)))
-                (visited (cons (list row column) visited))
-                (selected neighbours)
-                (neigbours (not_in (not_in (fields_with_symbol 'X (get_neighbours row column)) visited) selected))
-                (next_node (follow_n visited selected row column goals symbol neighbours))))))))
-
-(defun follow_n (visited selected row column goals symbol neighbours)
-  (cond
-    ((null neighbours) '())
-    (t (if (null (follow_p visited selected (caar neighbours) (cadar neighbours) goals symbol))
-         (follow_n visited selected row column goals symbol (cdr neighbours))
-         t))))
-
 ; ==============================================================================
 
 (defun ring (symbol row column)
@@ -150,7 +143,7 @@
       '()))
     (t (if (check_ring_from symbol (caar potential) (cadar potential))
          t
-         (find_ring (not_visited (cdr potential)))))))
+         (find_ring symbol (not_visited_from (cdr potential)))))))
 
 (defun check_ring_from(symbol row column)
   (if (equal (node-value (cadr (get_element row column))) symbol)
@@ -159,17 +152,17 @@
           t)
         (if (is_on_side row column)
               (progn
-               (mark_as_visited row colum)
+               (mark_as_visited row column)
                '())
               (progn
-                (mark_as_visited row_colum)
-                (check_surrounding symbol (symbol_and_neutral symbol (not_visited (get_neighbours row column))))))))
+                (mark_as_visited row_column)
+                (check_surrounding symbol (symbol_and_neutral symbol (not_visited_from (get_neighbours row column))))))))
 
 (defun check_surrounding (symbol neighbours)
   (cond
     ((null neighbours) '())
     (t (if (not (null (check_ring_from symbol (caar neighbours) (cadar neighbours))))
-         (check_surrounding symbol (not_visited (cdr neighbours)))
+         (check_surrounding symbol (not_visited_from (cdr neighbours)))
          '()))))
 
 (defun is_on_side(row column)
@@ -203,6 +196,8 @@
 (make_move 'X '9 '5)
 
 (print_matrix)
+
+(trace check_ring_from)
 
 (princ (ring 'X '0 '0))
 
