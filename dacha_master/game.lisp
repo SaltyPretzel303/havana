@@ -25,5 +25,3 @@
                             (cso (screen:clear-window (screen:make-window)))
                             (pmo (print_matrix)))))))
          (g (game (next_player player))))))
-
-(game #\X)

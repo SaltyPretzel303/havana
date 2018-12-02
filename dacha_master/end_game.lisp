@@ -3,6 +3,7 @@
 (load "creator.lisp")
 (load "move.lisp")
 (load "printer.lisp")
+(load "game.lisp")
 
 ; in variable corners sets coordinats of all corners
 (setq corners (cons (list '0 '0) ; upper left
@@ -173,10 +174,7 @@
 
 (defun is_on_side(row column)
   (member (list row column) sides :test 'equal))
-
 ; ==============================================================================
-
-; test ends here
 
 (make_move 'X '0 '0) ; 0 0
 (make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
@@ -206,8 +204,10 @@
 
 (print_matrix)
 
-(find_bridge 'X)
-(princ visited_nodes)
+(princ (ring 'X '0 '0))
+
+; (find_bridge 'X)
+; (princ visited_nodes)
 
 
 ; (follow_path_from_to '0 '0 '( (0 5) (5 10) (10 5)) 'X)
