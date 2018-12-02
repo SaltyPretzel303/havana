@@ -51,7 +51,7 @@
          (s (let* (
                     (bridge (check_bridge symbol))
                     (fork (check_fork played))
-                    (ring '()))
+                    (ring (check_ring played)))
                (if (or (not (null bridge)) (not (null fork)) (not (null ring)))
                  (progn
                    (screen:clear-window (screen:make-window))
