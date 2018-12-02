@@ -48,12 +48,4 @@
 (defun get_element(row column)
   (get_column column (get_row row)))
 
-(defun mark_as_visited(row column)
-  (setf (assoc column (assoc row matrix)) (append (get_element row column) (list #\v))))
-
-(defun is_visited (row column)
-  (if (equalp (car (cddr (get_element row column))) #\v) ; get_elemnt returns-> (1 X 'v') -> 'v' if visited
-    (t)
-    '())) ; field is visited (marked with 'v' on third place)
-
 (create_matrix 6)
