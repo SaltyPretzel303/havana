@@ -34,8 +34,12 @@
           t
           matrix)))))
 
-(defun get_state_after(symbol row column)
+(defun next_state(prev_state symbol row column)
   (let* (
-         (state_copy matrix)
-         (new_state (setf (cadr (assoc column (cadr (assoc row state_copy)))) symbol)))
+         (new_state prev_state)
+         (changed_cell (setf (cadr (assoc column (cadr (assoc row new_state)))) symbol)))
     new_state))
+
+(princ (next_state matrix #\X '0 '0))
+(princ #\linefeed)
+(princ matrix)
