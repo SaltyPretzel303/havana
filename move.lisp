@@ -28,17 +28,18 @@
 (defun make_move_sample(sample)
   (cond
     ((null sample) '())
-    (t (progn
-        (setq matrix sample)
-        (if (or (ring symbol) (fork symbol) (bridge symbol))
-          t
-          matrix)))))
+    (t (setq matrix sample))))
+
+; ==============================================================================
 
 (defun next_state(prev_state symbol row column)
   (let* (
          (new_state (copy-tree prev_state))
-         (changed_cell (setf (cadr (assoc column (cadr (assoc row new_state)))) symbol)))
+         (changed_cell (setf (cadr (assoc column (cadr (assoc row new_state)))) symbol))
+         (new_state (cons (list row column) new_state))) ; adds played coordinats before first row
     new_state))
+
+; ==============================================================================
 
 (defun possible_moves (prev_state symbol)
   (traverse_matrix prev_state prev_state symbol))
@@ -57,4 +58,11 @@
          (cons (next_state prev_state symbol row_index (caar row)) (traverse_row row_index (cdr row) prev_state symbol))
          (traverse_row row_index (cdr row) prev_state symbol)))))
 
-; (princ (possible_moves matrix #\X))
+; ==============================================================================
+
+(defun compute_next_move (player)
+  (let* (
+         (moves (possible_moves matrix player)))
+    (nth (random (length moves)) moves)))
+
+; (princ (car (possible_moves matrix #\X)))
