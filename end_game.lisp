@@ -37,6 +37,29 @@
 
 ; ==============================================================================
 
+(defun row_coordinates(index row)
+  (cond
+    ((null row) '())
+    (t (progn
+         (cons (list index (caar row)) (row_coordinates index (cdr row)))))))
+
+(defun side_coordinates (row_index)
+  (if (< row_index (* 2 (1- (get_mat_dim matrix))))
+    (let* (
+            (row (cadr (get_row row_index)))
+            (first_index (car (first row)))
+            (last_index (car (car (last row))))) ; last returns '(last_element) -> (car (last list)) = last_element
+          (append (list (list row_index first_index) (list row_index last_index)) (side_coordinates (1+ row_index))))
+    '()))
+
+(setf sides (let (
+                  (top (row_coordinates 0 (cadr (get_row 0))))
+                  (bottom (row_coordinates (* 2 (1- (get_mat_dim matrix ))) (cadr (get_row (* 2 (1- (get_mat_dim matrix)))))))
+                  (left_right (side_coordinates 1)))
+              (append top left_right bottom)))
+
+; ==============================================================================
+
 ; vraca T ako za prosledjeni simbol postoji bridge
 (defun check_bridge (symbol)
     (has_bridge (fields_with_symbol symbol corners)))
@@ -56,6 +79,14 @@
     (t (if (equalp (cadr (get_element (car (car ls))(cadr (car ls)))) symbol)
           (cons (car ls) (fields_with_symbol symbol (cdr ls)))
          (fields_with_symbol symbol (cdr ls))))))
+
+;filtrira listu i ostavlja samo elemente proslednjenog simbola
+(defun fields_without_symbol (symbol ls)
+  (cond
+    ((null ls) '())
+    (t (if (not (equalp (cadr (get_element (car (car ls))(cadr (car ls)))) symbol))
+          (cons (car ls) (fields_without_symbol symbol (cdr ls)))
+         (fields_without_symbol symbol (cdr ls))))))
 
 ;vraca listu suseda prosledjenog polja
 (defun get_neighbours(row column)
@@ -77,6 +108,14 @@
 ;nalazi susede start-a sa istim znakom
 (defun add_neighbours (start visited)
   (new_nodes (fields_with_symbol (cadr (get_element (car start) (cadr start))) (get_neighbours (car start) (cadr start))) visited))
+
+;dodaje susede start-a koji nemaju isti znak
+(defun add_not_neighbours (start visited)
+  (new_nodes (fields_without_symbol (cadr (get_element (car start) (cadr start))) (get_neighbours (car start) (cadr start))) visited))
+
+;dodaje elemente start-a koji nisu jednaki symbol-u
+(defun add_others (start visited symbol)
+  (new_nodes (fields_without_symbol symbol (get_neighbours (car start) (cadr start))) visited))
 
 ;vraca listu suseda koji vec nisu poseceni
 (defun new_nodes (neighbours visited)
@@ -130,48 +169,87 @@
 
 ; ==============================================================================
 
+(defun check_ring(played)
+    (has_ring (fields_without_symbol (cadr (get_element (car played) (cadr played))) (get_neighbours (car played) (cadr played))) (cadr (get_element (car played) (cadr played)))))
+
+(defun has_ring (ls symbol)
+  (cond ((null ls) '())
+        (t (or (ring_traversal (list (car ls)) '() symbol) (has_ring (cdr ls) symbol)))))
+
+; prolazi kroz polja koja nisu symbol i vraca true sve dok se ne naidje na list
+(defun ring_traversal (start visited symbol)
+    (cond ((null start) t)
+          ((member (car start) sides :test 'equalp)  '())
+          (t (let* ((visited1 (cons (car start) visited))
+                    (neighbours (add_others (car start) (append start visited1) symbol))
+                    (start1 (append (cdr start) neighbours))
+                    (ring (ring_traversal start1 visited1 symbol)))
+                  ring))))
+
 ; (make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
 ; (make_move 'O (1- (get_mat_dim matrix)) '0) ; 5 0
 ; (make_move 'X (1- (get_mat_dim matrix)) (- (* 2 (get_mat_dim matrix)) 2)) ; 5 10
 ; (make_move 'X (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; 10 5
 ; (make_move 'O (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) ; 10 10
 
-; (make_move 'o '0 '0) ; 0 0
-; (make_move 'o '1 '1)
-; (make_move 'x '2 '2)
-; (make_move 'x '3 '3)
-; (make_move 'x '4 '4)
+; (make_move 'O '0 '0) ; 0 0
+; (make_move 'O '1 '1)
+; (make_move 'X '2 '2)
+; (make_move 'X '3 '3)
+; (make_move 'X '4 '4)
 ;
-; (make_move 'o '0 '2)
-; (make_move 'o '1 '2)
+; (make_move 'O '0 '2)
+; (make_move 'O '1 '2)
 ;
-; (make_move 'x '2 '1)
-; (make_move 'x '2 '0)
+; (make_move 'X '2 '1)
+; (make_move 'X '2 '0)
 ;
 ; (make_move 'X '3 '3)
-; ; (make_move 'X '4 '3)
+; (make_move 'X '4 '3)
 ;
-; (make_move 'o '9 '5)
+; (make_move 'O '9 '5)
 ;
-; (make_move 'x '10 '6)
+; (make_move 'X '10 '6)
+
+
+; (make_move 'O '7 '3)
 ;
-; (make_move 'o '7 '3)
-;
-; (make_move 'X '5 '4)
-; (make_move 'X '6 '3)
-; (make_move 'X '6 '4)
-; (make_move 'X '7 '2)
-; (make_move 'X '7 '5)
-; ; (make_move 'X '7 '6)
-; (make_move 'X '7 '7)
-; (make_move 'X '7 '8)
-; (make_move 'X '7 '9)
-; (make_move 'X '8 '10)
-; (make_move 'X '8 '5)
-; (make_move 'X '6 '7)
-; (make_move 'X '5 '7)
-; (make_move 'X '5 '8)
-; (make_move 'X '5 '9)
+;(make_move 'X '5 '4)
+;(make_move 'X '6 '3)
+;(make_move 'X '6 '4)
+;(make_move 'X '7 '2)
+;(make_move 'X '7 '5)
+;(make_move 'X '7 '6)
+;(make_move 'X '7 '7)
+;(make_move 'X '7 '8)
+;(make_move 'X '7 '9)
+;(make_move 'X '8 '10)
+;(make_move 'X '8 '5)
+;(make_move 'X '6 '7)
+;(make_move 'X '5 '7)
+;(make_move 'X '5 '8)
+;(make_move 'X '5 '9)
+;(make_move 'X '6 '10)
+;(make_move 'X '7 '10)
+;(make_move 'X '5 '6)
+;(make_move 'X '4 '3)
+;(make_move 'X '3 '3)
+;(make_move 'X '3 '4)
+;(make_move 'X '3 '5)
+;(make_move 'X '3 '6)
+;(make_move 'X '4 '7)
+
+;(print_matrix)
+
+;(fields_without_symbol 'X ())
+;(princ (fields_without_symbol 'X '((8 10) (8 9) (6 7) (2 2))))
+
+;(trace fields_without_symbol)
+;(princ (check_ring '(6 7)))
+
+;(princ (cadr (get_element '7 '7)))
+;(princ (not (equalp (cadr (get_element '7 '7)) 'X)))
+;(princ (check_ring '(6 7)))
 
 ; (trace traversal)
 ; (princ (get_fork_tree '(5 4)))
