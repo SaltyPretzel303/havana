@@ -17,8 +17,8 @@
     ((null row) '())
     (t (append
         (create_padding (calc_padding_size (car row) (get_mat_dim matrix)))
-        ; (list (get_ascii (car row)))
-        (list (car row)) ; for debug
+        (list (get_ascii (car row)))
+        ; (list (car row)) ; for debug
         (list #\space)
         (extract_values (cadr row))
         ; (list #\space)
@@ -30,8 +30,8 @@
     ((null row) '())
     (t (append
         (create_padding (calc_padding_size (car row) (get_mat_dim matrix)))
-        ; (list (get_ascii (car row)))
-        (list (car row)) ; for debug
+        (list (get_ascii (car row)))
+        ; (list (car row)) ; for debug
         (list #\space)
         (extract_values (cadr row))
         (list #\linefeed)))))
