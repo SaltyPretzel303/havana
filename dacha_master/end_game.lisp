@@ -13,6 +13,7 @@
                                 (cons (list (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; lower left
                                       (cons (list (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) '())))))));lower right
 ; ==============================================================================
+; cera
 (defun row_coordinates(index row)
   (cond
     ((null row) '())
@@ -33,6 +34,29 @@
                   (bottom (row_coordinates (* 2 (1- (get_mat_dim matrix ))) (cadr (get_row (* 2 (1- (get_mat_dim matrix)))))))
                   (left_right (side_coordinates 1)))
               (append top left_right bottom)))
+; ==============================================================================
+; dacha
+(defun go_down_left (start end)
+  (cond ((equal start end) '())
+        (t (cons start (go_down_left (list (+ 1 (car start)) (cadr start)) end)))))
+
+(setf upper_left_wall (go_down_left '(1 0) (list (- (get_mat_dim matrix) 1) 0)))
+(setf down_right_wall (go_down_left (list (get_mat_dim matrix) (* 2 (- (get_mat_dim matrix) 1))) (list (* 2 (- (get_mat_dim matrix) 1)) (* 2 (- (get_mat_dim matrix) 1)))))
+
+(defun go_down_right (start end)
+  (cond ((equal start end) '())
+        (t (cons start (go_down_right (list (+ 1 (car start)) (+ 1 (cadr start))) end)))))
+
+(setf upper_right_wall (go_down_right (list 1 (get_mat_dim matrix)) (list (- (get_mat_dim matrix) 1) (* 2 (- (get_mat_dim matrix) 1)))))
+(setf down_left_wall (go_down_right (list (get_mat_dim matrix) 1) (list (* 2 (- (get_mat_dim matrix) 1)) (- (get_mat_dim matrix) 1))))
+
+(defun go_right (start end)
+  (cond ((equal start end) '())
+        (t (cons start (go_right (list (car start) (+ 1 (cadr start))) end)))))
+
+(setf upper_wall (go_right (list 0 1) (list 0 (- (get_mat_dim matrix) 1))))
+(setf down_wall (go_right (list (* 2 (- (get_mat_dim matrix) 1)) (get_mat_dim matrix)) (list (* 2 (- (get_mat_dim matrix) 1)) (* 2 (- (get_mat_dim matrix) 1)))))
+
 ; ==============================================================================
 
 ; vraca T ako za prosledjeni simbol postoji bridge
@@ -102,23 +126,29 @@
 
 ; ==============================================================================
 
-(defun fork(played)
-    (if (>= (number_of_walls_hit (get_fork_tree played)) 3) (car played) '()))
+(defun check_fork(played)
+    (if (>= (number_of_walls_hit (get_fork_tree played)) 3) 't '()))
 
 (defun get_fork_tree (played)
-    (traversal (list played) '()))
+    (fork_traversal (list played) '()))
 
-(defun traversal (start visited)
+(defun fork_traversal (start visited)
     (cond ((null start) visited)
           (t (let* ((visited1 (cons (car start) visited))
                     (neighbours (add_neighbours (car start) (append start visited1)))
                     (start1 (append (cdr start) neighbours))
-                    (tree (traversal start1 visited1)))
+                    (tree (fork_traversal start1 visited1)))
                   tree))))
 
 
 (defun number_of_walls_hit (ls)
-    '0)
+    (let* ((ul (if (null (compare_lists ls upper_left_wall)) '0 '1))
+          (ur (if (null (compare_lists ls upper_right_wall)) '0 '1))
+          (u (if (null (compare_lists ls upper_wall)) '0 '1))
+          (dl (if (null (compare_lists ls down_left_wall)) '0 '1))
+          (dr (if (null (compare_lists ls down_right_wall)) '0 '1))
+          (d (if (null (compare_lists ls down_wall)) '0 '1)))
+        (+ ul ur u dl dr d)))
 
 ; ==============================================================================
 
@@ -141,15 +171,25 @@
 ;(make_move 'O (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) ; 10 10
 ;(make_move 'X '1 '1)
 ;(make_move 'X '2 '3)
+;(make_move 'X '2 '1)
+;(make_move 'X '2 '0)
+;1(make_move 'X '1 '2)
+;(make_move 'X '0 '2)
 ;(make_move 'X '3 '3)
 ;(make_move 'X '2 '2)
 ;(make_move 'X '4 '3)
 ;(make_move 'X '4 '4)
 ;(make_move 'X '5 '4)
+;(make_move 'X '7 '3)
+;(make_move 'X '6 '3)
 ;(make_move 'X '6 '4)
+;(make_move 'X '7 '2)
 ;(make_move 'X '7 '5)
 ;(make_move 'X '7 '6)
 ;(make_move 'X '7 '7)
+;(make_move 'X '7 '8)
+;(make_move 'X '7 '9)
+;(make_move 'X '8 '10)
 ;(make_move 'X '8 '5)
 ;(make_move 'X '6 '7)
 ;(make_move 'X '5 '7)
@@ -160,8 +200,10 @@
 ; (trace traversal)
 ; (princ (get_fork_tree '(5 4)))
 
-(print_matrix)
-(princ sides)
+;(print_matrix)
+;(princ (check_fork (list 6 3)))
+
+
 
 ;(print_matrix)
 ;(princ (bridge 'X))
