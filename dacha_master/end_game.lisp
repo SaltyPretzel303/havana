@@ -142,7 +142,7 @@
 
 
 (defun number_of_walls_hit (ls)
-    (let* ((ul (if (null (compare_lists ls upper_left_wall)) '0 '1))
+    (let ((ul (if (null (compare_lists ls upper_left_wall)) '0 '1))
           (ur (if (null (compare_lists ls upper_right_wall)) '0 '1))
           (u (if (null (compare_lists ls upper_wall)) '0 '1))
           (dl (if (null (compare_lists ls down_left_wall)) '0 '1))
@@ -152,74 +152,51 @@
 
 ; ==============================================================================
 
-; check for ring just from last played position
-(defun ring (symbol row colum)
-  t)
+; (make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
+; (make_move 'O (1- (get_mat_dim matrix)) '0) ; 5 0
+; (make_move 'X (1- (get_mat_dim matrix)) (- (* 2 (get_mat_dim matrix)) 2)) ; 5 10
+; (make_move 'X (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; 10 5
+; (make_move 'O (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) ; 10 10
 
-(defun has_ring())
-
-; ==============================================================================
-
-
-;TESTING
-
-;(make_move 'X '0 '0) ; 0 0
-;(make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
-;(make_move 'O (1- (get_mat_dim matrix)) '0) ; 5 0
-;(make_move 'X (1- (get_mat_dim matrix)) (- (* 2 (get_mat_dim matrix)) 2)) ; 5 10
-;(make_move 'X (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; 10 5
-;(make_move 'O (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) ; 10 10
-;(make_move 'X '1 '1)
-;(make_move 'X '2 '3)
-;(make_move 'X '2 '1)
-;(make_move 'X '2 '0)
-;1(make_move 'X '1 '2)
-;(make_move 'X '0 '2)
-;(make_move 'X '3 '3)
-;(make_move 'X '2 '2)
-;(make_move 'X '4 '3)
-;(make_move 'X '4 '4)
-;(make_move 'X '5 '4)
-;(make_move 'X '7 '3)
-;(make_move 'X '6 '3)
-;(make_move 'X '6 '4)
-;(make_move 'X '7 '2)
-;(make_move 'X '7 '5)
-;(make_move 'X '7 '6)
-;(make_move 'X '7 '7)
-;(make_move 'X '7 '8)
-;(make_move 'X '7 '9)
-;(make_move 'X '8 '10)
-;(make_move 'X '8 '5)
-;(make_move 'X '6 '7)
-;(make_move 'X '5 '7)
-;(make_move 'X '5 '8)
-;(make_move 'X '5 '9)
-;(make_move 'X '9 '5)
+; (make_move 'o '0 '0) ; 0 0
+; (make_move 'o '1 '1)
+; (make_move 'x '2 '2)
+; (make_move 'x '3 '3)
+; (make_move 'x '4 '4)
+;
+; (make_move 'o '0 '2)
+; (make_move 'o '1 '2)
+;
+; (make_move 'x '2 '1)
+; (make_move 'x '2 '0)
+;
+; (make_move 'X '3 '3)
+; ; (make_move 'X '4 '3)
+;
+; (make_move 'o '9 '5)
+;
+; (make_move 'x '10 '6)
+;
+; (make_move 'o '7 '3)
+;
+; (make_move 'X '5 '4)
+; (make_move 'X '6 '3)
+; (make_move 'X '6 '4)
+; (make_move 'X '7 '2)
+; (make_move 'X '7 '5)
+; ; (make_move 'X '7 '6)
+; (make_move 'X '7 '7)
+; (make_move 'X '7 '8)
+; (make_move 'X '7 '9)
+; (make_move 'X '8 '10)
+; (make_move 'X '8 '5)
+; (make_move 'X '6 '7)
+; (make_move 'X '5 '7)
+; (make_move 'X '5 '8)
+; (make_move 'X '5 '9)
 
 ; (trace traversal)
 ; (princ (get_fork_tree '(5 4)))
 
-;(print_matrix)
-;(princ (check_fork (list 6 3)))
-
-
-
-;(print_matrix)
-;(princ (bridge 'X))
-;(trace add_neighbours)
-;(untrace get_element)
-;(trace bridge_traversal)
-;(princ (bridge_traversal '((0 0)) '((5 10) (10 5)) '()))
-
-;(princ corners)
-;(princ #\linefeed)
-;(princ (fields_with_symbol 'X corners))
-;(trace bridge_traversal)
-;(has_bridge (fields_with_symbol 'X corners))
-
-
-; (princ #\linefeed)
-; (princ corners)
-; (princ #\linefeed)
-; (princ (fields_with_symbol 'X corners))
+; (print_matrix)
+; (princ (check_fork (list 6 3)))
