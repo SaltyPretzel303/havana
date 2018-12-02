@@ -35,4 +35,3 @@
                                       (screen:clear-window (screen:make-window))
                                       (print_matrix)
                                       (game (next_player player)))))))))))))
-(game #\X)

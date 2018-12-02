@@ -4,17 +4,36 @@
 (load "move.lisp")
 (load "printer.lisp")
 
+; ==============================================================================
+
 (setf corners (cons (list '0 '0) ; upper left
                 (cons (list '0 (1- (get_mat_dim matrix))) ; upper right
                     (cons (list (1- (get_mat_dim matrix)) '0) ; middle left
                           (cons (list (1- (get_mat_dim matrix)) (- (* 2 (get_mat_dim matrix)) 2)) ; middle right
                                 (cons (list (- (* 2 (get_mat_dim matrix)) 2) (1- (get_mat_dim matrix))) ; lower left
                                       (cons (list (- (* 2 (get_mat_dim matrix)) 2) (- (* 2 (get_mat_dim matrix)) 2)) '())))))));lower right
+; ==============================================================================
+(defun row_coordinates(index row)
+  (cond
+    ((null row) '())
+    (t (progn
+         (cons (list index (caar row)) (row_coordinates index (cdr row)))))))
 
-; (setf ul_wall (set_upper_left_wall '(1 0)))
+(defun side_coordinates (row_index)
+  (if (< row_index (* 2 (1- (get_mat_dim matrix))))
+    (let* (
+            (row (cadr (get_row row_index)))
+            (first_index (car (first row)))
+            (last_index (car (car (last row))))) ; last returns '(last_element) -> (car (last list)) = last_element
+          (append (list (list row_index first_index) (list row_index last_index)) (side_coordinates (1+ row_index))))
+    '()))
 
-
-
+(setf sides (let (
+                  (top (row_coordinates 0 (cadr (get_row 0))))
+                  (bottom (row_coordinates (* 2 (1- (get_mat_dim matrix ))) (cadr (get_row (* 2 (1- (get_mat_dim matrix)))))))
+                  (left_right (side_coordinates 1)))
+              (append top left_right bottom)))
+; ==============================================================================
 
 ; vraca T ako za prosledjeni simbol postoji bridge
 (defun bridge (symbol)
@@ -24,7 +43,10 @@
 (defun has_bridge(ls)
   (cond ((null ls) '())
         ((equalp (length ls) 1) '())
-        (t (if (null (check_bridge (list (car ls)) (cdr ls) '())) (has_bridge (cdr ls)) 't))))
+        (t (if (null (check_bridge (list (car ls)) (cdr ls) '()))
+             (has_bridge (cdr ls))
+             't))))
+; ==============================================================================
 
 ;filtirira listu i ostavlja samo elemente prosledjenog simbola
 (defun fields_with_symbol (symbol ls)
@@ -37,7 +59,7 @@
 ;vraca listu suseda prosledjenog polja
 (defun get_neighbours(row column)
   (if (or (null row) (null column))
-    (princ (list "ne radi za1: " row column)); invalid coordinats
+    (princ (list "ne radi za1: " row column)); invalid coordinates
     (append (return_if_valid (1- row) (1- column)) ; upper left
           (append (return_if_valid (1- row) column) ; upper right
                 (append (return_if_valid row (1- column)) ; left
@@ -99,7 +121,15 @@
 (defun number_of_walls_hit (ls)
     '0)
 
+; ==============================================================================
 
+; check for ring just from last played position
+(defun ring (symbol row colum)
+  t)
+
+(defun has_ring)
+
+; ==============================================================================
 
 
 ;TESTING
@@ -145,15 +175,6 @@
 ;(has_bridge (fields_with_symbol 'X corners))
 
 
-; (follow_path_from_to '() '0 '0 '(('10 5)) 'X)
-
-; (mark_as_visited '0 '0)
-; (princ (append (get_element '0 '0) (list #\#)))
-;(princ matrix)
-
-; (mark_as_visited '0 '0)
-
-;
 ; (princ #\linefeed)
 ; (princ corners)
 ; (princ #\linefeed)

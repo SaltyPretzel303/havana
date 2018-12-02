@@ -16,3 +16,26 @@
   (cond
     ((null (is_valid row column)) '())
     (t (setf (cadr (get_element row column)) symbol))))
+
+(defun make_move_input(symbol row column)
+  (if (is_valid row column)
+    (progn
+      (setf (cadr (get_element row column)) symbol)
+      (if (or (ring symbol) (fork symbol) (bridge symbol))
+        t
+        matrix))))
+
+(defun make_move_sample(sample)
+  (cond
+    ((null sample) '())
+    (t (progn
+        (setq matrix sample)
+        (if (or (ring symbol) (fork symbol) (bridge symbol))
+          t
+          matrix)))))
+
+(defun get_state_after(symbol row column)
+  (let* (
+         (state_copy matrix)
+         (new_state (setf (cadr (assoc column (cadr (assoc row state_copy)))) symbol)))
+    new_state))
