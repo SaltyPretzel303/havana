@@ -9,9 +9,9 @@
     ((or (= depth 0) (terminal_node board)) (evaluate_board temp_board)) ; terminal_node -> no more valid moves
     (t (cond
         ((= rule "max")
-            (get_max_move (possible_moves board player) alphabeta rule depth player))
+            (get_max_move (possible_moves board player) alpha beta rule depth player))
         ((= rule "min")
-            (min_move (possible_moves board player) alpha beta rule depth player))))))
+            (get_min_move (possible_moves board player) alpha beta rule depth player))))))
 
 (defun get_max_move (poss_moves alpha beta rule depth player)
   (cond
@@ -25,7 +25,7 @@
 
 (defun get_min_move (poss_moves alpha beta rule depth player)
   (cond
-    ((null poss_mvoes) beta)
+    ((null poss_moves) beta)
     (t (let (
              (beta (min beta (alpha_beta (car poss_moves) (1- depth) alpha beta (get_next_rule rule) (next_player player)))))
          (if (<= beta alpha)
