@@ -124,10 +124,13 @@
           (new_nodes (cdr neighbours) visited))
         (t (cons (car neighbours) (new_nodes (cdr neighbours) visited)))))
 
+; ==============================================================================
+
 ;ako se neki element prve liste, nalazi u drugoj => T else '()
 (defun compare_lists(startList endList)
   (cond ((null startList) '())
         (t (if (member (car startList) endList :test 'equalp) (car startList) (compare_lists (cdr startList) endList)))))
+
 
 ;vratice T ako postoji put od start polja do nekog od end polja
 (defun bridge_traversal (start end visited)
@@ -238,21 +241,3 @@
 ;(make_move 'X '3 '5)
 ;(make_move 'X '3 '6)
 ;(make_move 'X '4 '7)
-
-;(print_matrix)
-
-;(fields_without_symbol 'X ())
-;(princ (fields_without_symbol 'X '((8 10) (8 9) (6 7) (2 2))))
-
-;(trace fields_without_symbol)
-;(princ (check_ring '(6 7)))
-
-;(princ (cadr (get_element '7 '7)))
-;(princ (not (equalp (cadr (get_element '7 '7)) 'X)))
-;(princ (check_ring '(6 7)))
-
-; (trace traversal)
-; (princ (get_fork_tree '(5 4)))
-
-; (print_matrix)
-; (princ (check_fork (list 6 3)))

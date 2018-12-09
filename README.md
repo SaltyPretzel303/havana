@@ -1,10 +1,10 @@
-Havana
+#Havana
 
-tim Camila Cabello
+###Tim: Camila Cabello
 Danilo Vulović
 Dušan Zamahajev
 Nemanja Milosavljević
-(testirano na linuxu sa clisp)
+(testirano na debian-based linuxu-u sa clisp-om)
 
 Reprezentacije table za igru:
 
@@ -22,17 +22,17 @@ Reprezentacije table za igru:
 =================================================================================
 
 File:  creator.lisp
-	
+
 Function: (create_matrix dim)
 	Kreira matricu (tablu za igru) zadate dimenzije pozivom funkcije (gen_row row dim) koja se dalje rekurzivno poziva kreirajući redove matrice.
 
-Function: (get_range row dim) 
+Function: (get_range row dim)
 Za zadati red i dimenziju polja za igru vraća listu u kojoj je prvi element indeks prvog elementa u redu dok je drugi element indeks poslednjeg elementa u redu.
 
 =================================================================================
 File: ascii.lisp
 	Na pocetku fajla se u globalnu promenljivu ‘ascii’ postavlja lista ascii karatkera počevši od karaktera  ‘A’ do ‘Z’ koja će se kasnije koristiti za dobijanje karaktera sa početka reda na osnovu indeksa istog.
-	
+
 	Function: (get_ascii index)
 	Ukoliko je index u granicama dimenzije liste ‘ascii’ funkcija vraca vrednost sa pozicije index liste ‘ascii’.
 
@@ -41,7 +41,7 @@ Na osnovu prosleđenog karaktera vraća njegov index u listi ‘ascii’.
 
 =================================================================================
 File: printer.lisp
- 
+
 Function: (gen_print_matrix mat)
 	Na osnovu prosleđene matrice 'mat' koja predstavlja tablu za igru u originalnom obliku kreira novu matricu koja je spremna za prikaz (dodaje prazan prostor pre početka svakog reda, index reda zamenjuje karakterom i dodaje index kolone na kraju redova gornje polovine matrice). Novokreirana matrica se postavlja u globalnu promenljivu print_mat koja takođe predstavlja i povratnu vrednost funkcije.
 	Nad svakim izdvojenim redom, korišćenjem 'mapcar' funkcije, pozivaju se funkcije 'construct_lower_half' ili 'construct_upper_half' u zavisnosti da li se radi o redu sa gornje ili donje polovine matrice. Na kraju redova sa gornje plovine matrice dodaju se indeksi kolone.
@@ -68,14 +68,14 @@ Function: (print_matrix)
 
 =================================================================================
 File: move.lisp
-	
-Function: (is_valid row column) 
+
+Function: (is_valid row column)
 		Proverava da li je zadato polje na validnim koordinatama.
-	
+
 	Function: (make_move symbol row column)
 		Na poziciju određenu sa row i column postavlja prosleđeni symbol.
-	
-	
+
+
 Function: (make_move_sample sample)
 	Menja trenutnu matricu (stanje na tabli) prosleđenom (sample).
 
@@ -142,14 +142,14 @@ Vraća potvrtdu da li postoji ring na osnovu upravo odigranog poteza.
 
 Function (ring_traversal start visited symbol)
 Prolazi kroz polja koja nisu jednaka symbol-u i vraća T ukoliko nijedan zid nije dotaknut, u suprotnom vraća ‘().           
-	
+
 
 =================================================================================
 File: game.lisp
-  
+
 Function: (player_part_game player)
 	Funkcija koja od korisnika zahteva unos dve vrednosti koje predstavljaju polje na kome će biti postavljen prosleđeni simbol (player), (ukoliko su unete validne koordinate) odigrava zadati potez (postavlja simbol) i proverava da li je došlo do kraja igre odnosno da li je kreiran 'bridge', 'fork' ili 'ring'. Ukoliko je ispunjen neki od uslova za kraj igre, prikazuje se prikladna poruka i igra se zavrsava dok se u suprotnom poziva funkcija zadužena za potez računara.
-	
+
 	Function: (coputer_part_game player)
 	Funkcija koja na osnovu trenutnog stanja table zahteva izračunavanje najboljeg mogućeg poteza za igrača određenog argumentom ‘player’, dobijeno stanje postavlja na mesto trenutnog stanja a zatim proverava da li je došlo do ispunjenja nekog od uslova za kraj igre. Ukoliko je igra završena prikazuje prikladnu poruku dok se u suprotnom poziva funkciju za igru drugog igrača.
 
@@ -159,4 +159,3 @@ Function: (next_player player)
 
 
 =================================================================================
-
