@@ -3,6 +3,7 @@
 (load "creator.lisp")
 (load "move.lisp")
 
+; returns (evaluation (row, column))
 (defun alpha_beta(board alpha beta depth rule player) ; rule -> min || max
   (cond
     ((or (= depth 0) (terminal_node board)) (evaluate_board temp_board)) ; terminal_node -> no more valid moves
@@ -32,15 +33,16 @@
            (min_move (cdr poss_moves) alpha beta rule depth player) ; else
            )))))
 
-(defun evaluate_board (board))
+(defun evaluate_board (board)
+  10)
 
 (defun max (a b)
-  (if (> a b)
+  (if (> (car a) (car b))
     a ; if a>b
     b)); else if a<=b
 
 (defun min (a b)
-  (if (< a b)
+  (if (< (car a) (car b))
     a ; if a < b
     b)); else if a >= b
 
