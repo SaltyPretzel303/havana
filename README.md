@@ -1,11 +1,15 @@
 # Havana
 
 ### Tim: Camila Cabello
-Danilo Vulović
-Dušan Zamahajev
-Nemanja Milosavljević
-(testirano na debian-based linuxu-u sa clisp-om)
 
+* Danilo Vulović
+* Dušan Zamahajev
+* Nemanja Milosavljević
+```
+(testirano na debian-based linuxu-u sa clisp-om)
+```
+
+```
 Reprezentacije table za igru:
 
 (
@@ -18,7 +22,7 @@ Reprezentacije table za igru:
   .
   ((2 * (mat_dim - 1)) ( (mat_dim value) ((mat_dim+1) value) ... ((2*(mat_dim-1)) value) )  )
 )
-
+```
 =================================================================================
 
 File:  creator.lisp
