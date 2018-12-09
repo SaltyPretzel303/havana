@@ -8,9 +8,9 @@
   (cond
     ((or (= depth 0) (terminal_node board)) (evaluate_board temp_board)) ; terminal_node -> no more valid moves
     (t (cond
-        ((= player 'X)
+        ((equalp player 'X)
             (get_max_move (possible_moves board player) alpha beta depth player))
-        ((= player 'O)
+        ((equalp player 'O)
             (get_min_move (possible_moves board player) alpha beta depth player))))))
 
 (defun get_max_move (poss_moves alpha beta depth player)
