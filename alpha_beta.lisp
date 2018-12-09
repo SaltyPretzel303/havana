@@ -8,28 +8,15 @@
     ((or (= depth 0) (terminal_node board)) (evaluate_board temp_board)) ; terminal_node -> no more valid moves
     (t (cond
         ((= rule "max")
-            (let (
-                  (poss_moves (possible_moves board player))
-                  (max_move (get_max_move poss_moves alpha beta rule depth player))
-                 )
-             max_move ; return from let
-            )
-          )
+            (get_max_move (possible_moves board player) alphabeta rule depth player))
         ((= rule "min")
-            (let (
-                  (pos_moves (possible_moves board player))
-                  (min_move (get_min_move poss_moves alpha beta rule depth player))
-                 )
-             min_move ; return from let
-            )
-          )
-         ))))
+            (min_move (possible_moves board player) alpha beta rule depth player))))))
 
 (defun get_max_move (poss_moves alpha beta rule depth player)
   (cond
     ((null poss_moves) alpha) ; no more possible moves
     (t (let (
-             (alpha (max alpha (alpha_beta (car poss_moves) (1- depth) alpha beta (get_next_rule rule) player))))
+             (alpha (max alpha (alpha_beta (car poss_moves) (1- depth) alpha beta (get_next_rule rule) (next_player player)))))
          (if (<= beta alpha)
            alpha ; if true
            (max_move (cdr poss_moves) alpha beta rule depth player) ; else
@@ -39,10 +26,10 @@
   (cond
     ((null poss_mvoes) beta)
     (t (let (
-             (beta (min beta (alpha_beta (car poss_moves) (1- depth) alpha beta (get_next_rule rule) player))))
+             (beta (min beta (alpha_beta (car poss_moves) (1- depth) alpha beta (get_next_rule rule) (next_player player)))))
          (if (<= beta alpha)
-           beta
-           (min_move (cdr poss_moves) alpha beta rule depth player)
+           beta ; if true
+           (min_move (cdr poss_moves) alpha beta rule depth player) ; else
            )))))
 
 (defun evaluate_board (board))
