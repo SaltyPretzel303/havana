@@ -13,9 +13,9 @@
 Reprezentacije table za igru:
 
 (
-  ------------ jedan red table za igru --------------
+  ---------- jedan red table za igru ----------
  (0 ( (0 value) (1 value) ... (mat_dim value) ))
-                                               -jedno polje na tabli-
+                              -jedno polje na tabli-
   (1 ( (0 value) (1 value) ... ((mat_dim+1) value) ))
   .
   .
@@ -23,17 +23,16 @@ Reprezentacije table za igru:
   ((2 * (mat_dim - 1)) ( (mat_dim value) ((mat_dim+1) value) ... ((2*(mat_dim-1)) value) )  )
 )
 ```
-=================================================================================
 
-File:  creator.lisp
+### File:  creator.lisp
 
-Function: (create_matrix dim)
-	Kreira matricu (tablu za igru) zadate dimenzije pozivom funkcije (gen_row row dim) koja se dalje rekurzivno poziva kreirajući redove matrice.
+* Function: (create_matrix dim)
 
-Function: (get_range row dim)
+Kreira matricu (tablu za igru) zadate dimenzije pozivom funkcije (gen_row row dim) koja se dalje rekurzivno poziva kreirajući redove matrice.
+* Function: (get_range row dim)
+
 Za zadati red i dimenziju polja za igru vraća listu u kojoj je prvi element indeks prvog elementa u redu dok je drugi element indeks poslednjeg elementa u redu.
 
-=================================================================================
 File: ascii.lisp
 	Na pocetku fajla se u globalnu promenljivu ‘ascii’ postavlja lista ascii karatkera počevši od karaktera  ‘A’ do ‘Z’ koja će se kasnije koristiti za dobijanje karaktera sa početka reda na osnovu indeksa istog.
 
