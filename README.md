@@ -26,9 +26,9 @@ Reprezentacije table za igru:
 
 ### File:  creator.lisp
 
-* Function: (create_matrix dim)
+* Function: (create_matrix dim)\
 	Kreira matricu (tablu za igru) zadate dimenzije pozivom funkcije (gen_row row dim) koja se dalje rekurzivno poziva kreirajući redove matrice.
-* Function: (get_range row dim)
+* Function: (get_range row dim)\
 	Za zadati red i dimenziju polja za igru vraća listu u kojoj je prvi element indeks prvog elementa u redu dok je drugi element indeks poslednjeg elementa u redu.
 
 
