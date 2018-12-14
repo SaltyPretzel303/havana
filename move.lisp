@@ -58,6 +58,13 @@
          (cons (next_state prev_state symbol row_index (caar row)) (traverse_row row_index (cdr row) prev_state symbol))
          (traverse_row row_index (cdr row) prev_state symbol)))))
 
+; pogledaj jel ovo okej
+(defun traverse_row_new (row_index row prev_state symbol)
+  (cond 
+    ((null row) '())
+    (t (if (equalp (cadar row) #\-)
+        (cons (list row_index (caar row)) (traverse_row row_index (cdr row) prev_state symbol))
+         (traverse_row row_index (cdr row) prev_state symbol)))))
 ; ==============================================================================
 
 (defun compute_next_move (player)
@@ -66,3 +73,5 @@
     (nth (random (length moves)) moves)))
 
 ; (princ (car (possible_moves matrix #\X)))
+
+
