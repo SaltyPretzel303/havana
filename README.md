@@ -27,11 +27,9 @@ Reprezentacije table za igru:
 ### File:  creator.lisp
 
 * Function: (create_matrix dim)
-
-Kreira matricu (tablu za igru) zadate dimenzije pozivom funkcije (gen_row row dim) koja se dalje rekurzivno poziva kreirajući redove matrice.
+	Kreira matricu (tablu za igru) zadate dimenzije pozivom funkcije (gen_row row dim) koja se dalje rekurzivno poziva kreirajući redove matrice.
 * Function: (get_range row dim)
-
-Za zadati red i dimenziju polja za igru vraća listu u kojoj je prvi element indeks prvog elementa u redu dok je drugi element indeks poslednjeg elementa u redu.
+	Za zadati red i dimenziju polja za igru vraća listu u kojoj je prvi element indeks prvog elementa u redu dok je drugi element indeks poslednjeg elementa u redu.
 
 ### File: ascii.lisp
 	Na pocetku fajla se u globalnu promenljivu ‘ascii’ postavlja lista ascii karatkera počevši od karaktera  ‘A’ do ‘Z’ koja će se kasnije koristiti za dobijanje karaktera sa početka reda na osnovu indeksa istog.
@@ -152,7 +150,7 @@ Na samom početku file-a u globalnu promenljivu 'corners' se postavlja lista koo
 * Function: (player_part_game player)
 	Funkcija koja od korisnika zahteva unos dve vrednosti koje predstavljaju polje na kome će biti postavljen prosleđeni simbol (player), (ukoliko su unete validne koordinate) odigrava zadati potez (postavlja simbol) i proverava da li je došlo do kraja igre odnosno da li je kreiran 'bridge', 'fork' ili 'ring'. Ukoliko je ispunjen neki od uslova za kraj igre, prikazuje se prikladna poruka i igra se zavrsava dok se u suprotnom poziva funkcija zadužena za potez računara.
 
-* Function: (coputer_part_game player)
+* Function: (computer_part_game player)
 	Funkcija koja na osnovu trenutnog stanja table zahteva izračunavanje najboljeg mogućeg poteza za igrača određenog argumentom ‘player’, dobijeno stanje postavlja na mesto trenutnog stanja a zatim proverava da li je došlo do ispunjenja nekog od uslova za kraj igre. Ukoliko je igra završena prikazuje prikladnu poruku dok se u suprotnom poziva funkciju za igru drugog igrača.
 
 * Function: (next_player player)
