@@ -32,7 +32,9 @@ Reprezentacije table za igru:
 	Za zadati red i dimenziju polja za igru vraća listu u kojoj je prvi element indeks prvog elementa u redu dok je drugi element indeks poslednjeg elementa u redu.
 
 ### File: ascii.lisp
+```
 	Na pocetku fajla se u globalnu promenljivu ‘ascii’ postavlja lista ascii karatkera počevši od karaktera  ‘A’ do ‘Z’ koja će se kasnije koristiti za dobijanje karaktera sa početka reda na osnovu indeksa istog.
+```
 
 * Function: (get_ascii index)
 	Ukoliko je index u granicama dimenzije liste ‘ascii’ funkcija vraca vrednost sa pozicije index liste ‘ascii’.
