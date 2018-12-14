@@ -33,9 +33,8 @@ Reprezentacije table za igru:
 
 ### File: ascii.lisp
 ```
-	Na pocetku fajla se u globalnu promenljivu ‘ascii’ postavlja lista ascii karatkera počevši od 
-	karaktera  ‘A’ do ‘Z’ koja će se kasnije koristiti za dobijanje karaktera sa početka reda na osnovu indeksa istog.
-```
+Na pocetku fajla se u globalnu promenljivu ‘ascii’ postavlja lista ascii karatkera počevši od <br>
+karaktera  ‘A’ do ‘Z’ koja će se kasnije koristiti za dobijanje karaktera sa početka reda na osnovu indeksa istog.
 
 * Function: (get_ascii index)
 	Ukoliko je index u granicama dimenzije liste ‘ascii’ funkcija vraca vrednost sa pozicije index liste ‘ascii’.
@@ -83,8 +82,8 @@ Reprezentacije table za igru:
 * Function: (make_move_sample sample)
 	Menja trenutnu matricu (stanje na tabli) prosleđenom (sample).
 
-* Function: (possible_moves prev_state symbol)
-	Za prosleđeno stanje i simbol kreira listu matrica pri čemu svaka predstavlja po jednu moguću poziciju na kojoj se može odigrati datim simbolom.
+* Function: (possible_moves prev_state)
+	Za prosleđeno stanje kreira listu poteza u formatu parova (npr. ((0 0) (2 3) (4 5)...)) koji se mogu odigrati.
 
 * Function: (next_state prev_state symbol row column)
 	Na osnovu prosleđene matrice, reda i kolone, kreira (i vraća) novu matricu sa odigranim potezom na polju određenom sa ‘row’ i ‘column’.
