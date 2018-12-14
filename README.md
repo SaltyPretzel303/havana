@@ -26,16 +26,15 @@ Reprezentacije table za igru:
 
 ### File:  creator.lisp
 
-```
 * Function: (create_matrix dim)
 	Kreira matricu (tablu za igru) zadate dimenzije pozivom funkcije (gen_row row dim) koja se dalje rekurzivno poziva kreirajući redove matrice.
 * Function: (get_range row dim)
 	Za zadati red i dimenziju polja za igru vraća listu u kojoj je prvi element indeks prvog elementa u redu dok je drugi element indeks poslednjeg elementa u redu.
-```
+
 
 ### File: ascii.lisp
 
-## Na pocetku fajla se u globalnu promenljivu ‘ascii’ postavlja lista ascii karatkera počevši od karaktera  ‘A’ do ‘Z’ koja će se kasnije koristiti za dobijanje karaktera sa početka reda na osnovu indeksa istog.
+#### Na pocetku fajla se u globalnu promenljivu ‘ascii’ postavlja lista ascii karatkera počevši od karaktera  ‘A’ do ‘Z’ koja će se kasnije koristiti za dobijanje karaktera sa početka reda na osnovu indeksa istog.
 
 * Function: (get_ascii index)
 	Ukoliko je index u granicama dimenzije liste ‘ascii’ funkcija vraca vrednost sa pozicije index liste ‘ascii’.
@@ -97,7 +96,7 @@ Reprezentacije table za igru:
 =================================================================================
 ### File: end_game.lisp
 
-Na samom početku file-a u globalnu promenljivu 'corners' se postavlja lista koordinata temena heksagona. Takođe, globalne promenljive ‘upper_left_wall’, ‘upper_right_wall’, ‘upper_wall’, ‘down_left_wall’, ‘down_right_wall’ i ‘down_wall’, sadrže liste koordinata polja gornjeg levog, gornjeg desnog, gornjeg, donjeg levo, donjeg desno i donjeg zida respektivno. Za njihovu inicijalizaciju se koriste funkcije go_down_left, go_down_right, go_right.
+#### Na samom početku file-a u globalnu promenljivu 'corners' se postavlja lista koordinata temena heksagona. Takođe, globalne promenljive ‘upper_left_wall’, ‘upper_right_wall’, ‘upper_wall’, ‘down_left_wall’, ‘down_right_wall’ i ‘down_wall’, sadrže liste koordinata polja gornjeg levog, gornjeg desnog, gornjeg, donjeg levo, donjeg desno i donjeg zida respektivno. Za njihovu inicijalizaciju se koriste funkcije go_down_left, go_down_right, go_right.
 
 * Function: (go_down_left start end)
 	Vraća listu koordinata polja koja se nalaze od start-a do end-a uključujući start a bez end-a tako što kreće od start-a i ide kroz tablicu krećući se dole levo dok ne stigne do end-a.
