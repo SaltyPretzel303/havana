@@ -1,7 +1,6 @@
 #!/usr/bin/clisp
 
-(load "creator.lisp")
-(load "printer.lisp")
+; (load "alpha_beta.lisp")
 
 (defun is_valid(row column)
   (cond
@@ -48,11 +47,11 @@
         (traverse_row (caar board) (cadar board))
         (possible_moves (cdr board))))))
 
-(defun traverse_matrix (rows )
+(defun traverse_matrix (rows)
   (cond
     ((null rows) '())
     (t (append
-                      ; row index, row to be processed, symbol
+                      ; row index, row to be processed
         (traverse_row (caar rows) (cadar rows))
         (traverse_matrix (cdr rows))))))
 
@@ -70,10 +69,12 @@
     ((null row) '())
     (t (if (equalp (cadar row) #\-)
         (cons (list row_index (caar row)) (traverse_row row_index (cdr row)))
-        (traverse_row row_index (cdr row) symbol)))))
+        (traverse_row row_index (cdr row))))))
 ; ==============================================================================
 
 (defun compute_next_move (player)
   (let* (
-         (moves (possible_moves matrix player)))
-    (nth (random (length moves)) moves)))
+         (move (alpha_beta matrix (list 100 (list 0 0)) (list 100 (list 0 0)) 3 player))) ; alpha_beta (board, alpha, beta, depth, player)
+         ; (rand_move (random (length moves))))
+    (next_state matrix player (car move) (cadr move))))
+    ; format ((playedRow playedColumn) ( normal representation of the next board state))

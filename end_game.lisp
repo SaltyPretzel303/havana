@@ -121,7 +121,7 @@
 (defun new_nodes (neighbours visited)
   (cond ((null neighbours) '())
         ((member (car neighbours) visited :test 'equalp)
-          (new_nodes (cdr neighbours) visited))
+         (new_nodes (cdr neighbours) visited))
         (t (cons (car neighbours) (new_nodes (cdr neighbours) visited)))))
 
 ; ==============================================================================

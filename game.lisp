@@ -5,6 +5,7 @@
 (load "move.lisp")
 (load "ascii.lisp")
 (load "end_game.lisp")
+(load "alpha_beta.lisp")
 
 ; (defun set_upper_left_wall()'())
 
@@ -65,5 +66,7 @@
                    (screen:clear-window (screen:make-window))
                    (print_matrix)
                    (player_part_game (next_player symbol)))))))))
+
+; (trace get_min_move)
 
 (player_part_game #\X)
