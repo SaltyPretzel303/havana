@@ -41,37 +41,39 @@
 
 ; ==============================================================================
 
-(defun possible_moves (prev_state symbol)
-  (traverse_matrix prev_state prev_state symbol))
+; traverse matrix and sends each row to traverse_row
+(defun possible_moves (board)
+  (cond ((null board) '())
+    (t (append
+        (traverse_row (caar board) (cadar board))
+        (possible_moves (cdr board))))))
 
-(defun traverse_matrix (rows prev_state symbol)
+(defun traverse_matrix (rows )
   (cond
     ((null rows) '())
     (t (append
-        (traverse_row (caar rows) (cadar rows) prev_state symbol)
-        (traverse_matrix (cdr rows) prev_state symbol)))))
+                      ; row index, row to be processed, symbol
+        (traverse_row (caar rows) (cadar rows))
+        (traverse_matrix (cdr rows))))))
 
-(defun traverse_row (row_index row prev_state symbol)
+; this version returns tables instead of only coordinates
+; (defun traverse_row (row_index row prev_state symbol)
+;   (cond
+;     ((null row) '())
+;     (t (if (equalp (cadar row) #\-)
+;          (cons (next_state prev_state symbol row_index (caar row)) (traverse_row row_index (cdr row) prev_state symbol))
+;          (traverse_row row_index (cdr row) prev_state symbol)))))
+
+; traverse given row and consturcts (row column) pairs
+(defun traverse_row (row_index row)
   (cond
     ((null row) '())
     (t (if (equalp (cadar row) #\-)
-         (cons (next_state prev_state symbol row_index (caar row)) (traverse_row row_index (cdr row) prev_state symbol))
-         (traverse_row row_index (cdr row) prev_state symbol)))))
-
-; pogledaj jel ovo okej
-(defun traverse_row_new (row_index row prev_state symbol)
-  (cond 
-    ((null row) '())
-    (t (if (equalp (cadar row) #\-)
-        (cons (list row_index (caar row)) (traverse_row row_index (cdr row) prev_state symbol))
-         (traverse_row row_index (cdr row) prev_state symbol)))))
+        (cons (list row_index (caar row)) (traverse_row row_index (cdr row)))
+        (traverse_row row_index (cdr row) symbol)))))
 ; ==============================================================================
 
 (defun compute_next_move (player)
   (let* (
          (moves (possible_moves matrix player)))
     (nth (random (length moves)) moves)))
-
-; (princ (car (possible_moves matrix #\X)))
-
-
