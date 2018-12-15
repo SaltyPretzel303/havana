@@ -46,9 +46,9 @@
 
 (defun computer_part_game (symbol)
   (let* (
-         (new_state (compute_next_move symbol))
-         (played (car new_state)) ; first element of computed move is position of played field '(row, column)
-         (new_state (make_move_sample (cdr new_state)))
+         (new_move (compute_next_move symbol)) ; new_move format (evaluation (row column))
+         (played (cadr new_move))
+         (new_state (make_move symbol (car played) (cadr played)))
          (s (let* (
                     (bridge (check_bridge symbol))
                     (fork (check_fork played))

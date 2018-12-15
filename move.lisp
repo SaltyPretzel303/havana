@@ -73,8 +73,6 @@
 ; ==============================================================================
 
 (defun compute_next_move (player)
-  (let* (
-         (move (alpha_beta matrix (list 100 (list 0 0)) (list 100 (list 0 0)) 3 player))) ; alpha_beta (board, alpha, beta, depth, player)
-         ; (rand_move (random (length moves))))
-    (next_state matrix player (car move) (cadr move))))
-    ; format ((playedRow playedColumn) ( normal representation of the next board state))
+       (alpha_beta (cons (list 0 0) matrix) (list -999 (list 0 0)) (list 999 (list 0 0)) 3 player)) ; alpha_beta (board, alpha, beta, depth, player)
+       ; returned move format (evaluation (row column))
+       ; board -> ( fakePlayed (rest of the fields) )
