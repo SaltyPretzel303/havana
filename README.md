@@ -7,6 +7,7 @@
 * Nemanja Milosavljević
 ```
 (testirano na debian-based linuxu-u sa clisp-om)
+clisp game.lisp
 ```
 
 ```
@@ -30,6 +31,8 @@ Reprezentacije table za igru:
 	Kreira matricu (tablu za igru) zadate dimenzije pozivom funkcije (gen_row row dim) koja se dalje rekurzivno poziva kreirajući redove matrice.
 * Function: (get_range row dim)\
 	Za zadati red i dimenziju polja za igru vraća listu u kojoj je prvi element indeks prvog elementa u redu dok je drugi element indeks poslednjeg elementa u redu.
+* Function: (get_mat_dim mat)
+	Vraća dimenziju prosleđene matrice.
 
 
 ### File: ascii.lisp
@@ -83,14 +86,14 @@ Reprezentacije table za igru:
 	Menja trenutnu matricu (stanje na tabli) prosleđenom (sample).
 
 * Function: (possible_moves prev_state)
-	Za prosleđeno stanje kreira listu poteza u formatu parova (npr. ((0 0) (2 3) (4 5)...)) koji se mogu odigrati.
+	Za prosleđeno stanje kreira listu koordinata polja  (npr. ((x1 y1) (x2 y2) ... (xn yn))) na kojima se moze odigrati potez.
 
 * Function: (next_state prev_state symbol row column)
 	Na osnovu prosleđene matrice, reda i kolone, kreira (i vraća) novu matricu sa odigranim potezom na polju određenom sa ‘row’ i ‘column’.
 
 * Function: (compute_next_move player)
 	Za datog igraca izračunava najbolji mogući potez.
-    [Outdated] Trenutna implementacija vraća random potez kako bi bilo moguće igrati igru sa računarom.
+    <br />[Outdated] Trenutna implementacija vraća random potez kako bi bilo moguće igrati igru sa računarom.
 
 
 =================================================================================
@@ -140,8 +143,6 @@ Reprezentacije table za igru:
 * Function: (check_ring played)
 	Vraća potvrtdu da li postoji ring na osnovu upravo odigranog poteza.
 
-
-
 * Function (ring_traversal start visited symbol)
 	Prolazi kroz polja koja nisu jednaka symbol-u i vraća T ukoliko nijedan zid nije dotaknut, u suprotnom vraća ‘().           
 
@@ -159,5 +160,46 @@ Reprezentacije table za igru:
 	Vraća narednog igrača u odnosnu na trenutnog (prosleđenog).
 
 
+=================================================================================
+### File: alpha_beta.lisp
+
+* Function: (alpha_beta board alpha beta depth player)
+	Funkcija prima kao argumente ‘board’ koji predstavlja koordinate upravo odigranog poteza i stanje u kojem se nalazi polje za igru u formatu ((list X Y) state), ‘alpha’ i ‘beta’ su trenutno najveća i najmanja vrednost evaluacije u trenutnom podstablu respektivno, ‘depth’ je dubina na kojoj se nalazimo a ‘player’ nam daje informaciju ko trenutno igra. Rezultat poziva ove funkcije je evaluacija i poslednje odigran potez u formatu (list evaluation (list X Y)). Ukoliko je dubina 0 ili smo stigli do terminalnog čvora, evaluiramo trenutno stanje table.
+
+* Function: (get_max_move board poss_moves alpha beta depth player)
+	Funkcija ima iste argumente kao i alpha_beta uz dodatak argumenta ‘poss_moves’ koji sadrži koordinate polja na kojima može da se igra. Za svaki mogući potez generiše novo stanje i poziva funkciju alpha_beta sa manjom dubinom i suprotnim igračem. Vraća potez sa maksimalnom evaluacijom.
+
+* Function: (get_min_move board poss_moves alpha beta depth player)
+	Funkcija ima iste argumente kao i alpha_beta uz dodatak argumenta ‘poss_moves’ koji sadrži koordinate polja na kojima može da se igra. Za svaki mogući potez generiše novo stanje i poziva funkciju alpha_beta sa manjom dubinom i suprotnim igračem. Vraća potez sa minimalnom evaluacijom.
+
+* Function: (terminal_node board)
+	Funkcija proverava da li smo došli do terminalnog čvora.
+
+* Function: (evaluate_board board)
+	Funkcija vraća evaluaciju trenutnog stanja igre.
+
+* Function: (max_eval a b)
+	Vraća vrednost sa većom evaluacijom.
+
+* Function: (min_eval a b)
+	Vraća vrednost sa manjom evaluacijom.
 
 =================================================================================
+### File: negamax.lisp
+
+#### Ovo je samo varijacija alpha_beta poziva koja bi trebala da uštedi performanse ali nije još uvek u upotrebi.
+
+* Function: (negamax board alpha beta depth player)
+	Funkcija prima kao argumente ‘board’ koji predstavlja koordinate upravo odigranog poteza i stanje u kojem se nalazi polje za igru u formatu ((list X Y) state), ‘alpha’ i ‘beta’ su trenutno najveća i najmanja vrednost evaluacije u trenutnom podstablu respektivno, ‘depth’ je dubina na kojoj se nalazimo a ‘player’ nam daje informaciju ko trenutno igra. Rezultat poziva ove funkcije je evaluacija i poslednje odigran potez u formatu (list evaluation (list X Y)). Ukoliko je dubina 0 ili smo stigli do terminalnog čvora, evaluiramo trenutno stanje table.
+
+* Function: (get_max_move board poss_moves alpha beta depth player)
+	Funkcija ima iste argumente kao i alpha_beta uz dodatak argumenta ‘poss_moves’ koji sadrži koordinate polja na kojima može da se igra. Za svaki mogući potez generiše novo stanje i poziva funkciju negamax sa manjom dubinom, suprotnim igračem i menjajući vrednost alpha u -beta i beta u -alpha. Vraća potez sa maksimalnom evaluacijom.
+
+* Function: (terminal_node board)
+	Funkcija proverava da li smo došli do terminalnog čvora.
+
+* Function: (max_eval a b)
+	Vraća vrednost sa većom evaluacijom.
+
+* Function: (evaluate_board board)
+	Funkcija vraća evaluaciju trenutnog stanja igre sa znakom koji zavisi od igrača.

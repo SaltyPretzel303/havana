@@ -21,7 +21,7 @@
   (cond
     ((null poss_moves) alpha) ; no more possible moves
     (t (let (
-              (alpha (max alpha (alpha_beta (next_state (cdr board) player (caar poss_moves) (cadar poss_moves)) alpha beta (1- depth) (next_player player)))))
+              (alpha (max_eval alpha (alpha_beta (next_state (cdr board) player (caar poss_moves) (cadar poss_moves)) alpha beta (1- depth) (next_player player)))))
          (if (<= (car beta) (car alpha)) ; format of alpha& beta (evaluation (row, column))
            alpha ; if true
            (get_max_move board (cdr poss_moves) alpha beta depth player)))))) ; else
@@ -31,7 +31,7 @@
   (cond
     ((null poss_moves) beta)
     (t (let (
-              (beta (min beta (alpha_beta (next_state (cdr board) player (caar poss_moves) (cadar poss_moves)) alpha beta (1- depth) (next_player player)))))
+              (beta (min_eval beta (alpha_beta (next_state (cdr board) player (caar poss_moves) (cadar poss_moves)) alpha beta (1- depth) (next_player player)))))
          (if (<= (car beta) (car alpha)) ; format of alpha& beta (evaluation (row, column))
              beta ; if true
              (get_min_move board (cdr poss_moves) alpha beta depth player)))))) ; else
@@ -43,12 +43,12 @@
 (defun evaluate_board (board)
      (list -10 (car board))) ; (car board) -> played filed
 
-(defun max (a b)
+(defun max_eval (a b)
   (if (> (car a) (car b))
     a ; if a>b
     b)); else if a<=b
 
-(defun min (a b)
+(defun min_eval (a b)
   (if (< (car a) (car b))
     a ; if a < b
     b)); else if a >= b
