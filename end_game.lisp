@@ -173,7 +173,9 @@
 ; ==============================================================================
 
 (defun check_ring(played)
-    (has_ring (fields_without_symbol (cadr (get_element (car played) (cadr played))) (get_neighbours (car played) (cadr played))) (cadr (get_element (car played) (cadr played)))))
+    (or (check_surroundings (fields_with_symbol (cadr (get_element (car played) (cadr played))) (get_neighbours (car played) (cadr played))) (cadr (get_element (car played) (cadr played))))
+        (has_ring (fields_without_symbol (cadr (get_element (car played) (cadr played))) (get_neighbours (car played) (cadr played))) (cadr (get_element (car played) (cadr played))))))
+
 
 (defun has_ring (ls symbol)
   (cond ((null ls) '())
@@ -188,6 +190,15 @@
                     (start1 (append (cdr start) neighbours))
                     (ring (ring_traversal start1 visited1 symbol)))
                   ring))))
+
+(defun check_surroundings(neighbours symbol)
+  (cond ((null neighbours) '())
+        (t (or (= 6 (symbol_counter (get_neighbours (caar neighbours) (cadar neighbours)) symbol)) (check_surroundings (cdr neighbours) symbol)))))
+
+(defun symbol_counter(ls symbol)
+  (cond ((null ls) '0)
+        ((equalp symbol (cadr (get_element (caar ls) (cadar ls)))) (+ 1 (symbol_counter (cdr ls) symbol)))
+        (t (symbol_counter (cdr ls) symbol))))
 
 ; (make_move 'X  '0 (1- (get_mat_dim matrix))) ; 0 5
 ; (make_move 'O (1- (get_mat_dim matrix)) '0) ; 5 0
@@ -220,11 +231,14 @@
 ;(make_move 'X '5 '4)
 ;(make_move 'X '6 '3)
 ;(make_move 'X '6 '4)
+;(make_move 'X '6 '5)
+;(make_move 'X '6 '6)
 ;(make_move 'X '7 '2)
 ;(make_move 'X '7 '5)
 ;(make_move 'X '7 '6)
 ;(make_move 'X '7 '7)
 ;(make_move 'X '7 '8)
+;(make_move 'X '5 '5);
 ;(make_move 'X '7 '9)
 ;(make_move 'X '8 '10)
 ;(make_move 'X '8 '5)
@@ -241,3 +255,8 @@
 ;(make_move 'X '3 '5)
 ;(make_move 'X '3 '6)
 ;(make_move 'X '4 '7)
+;(print_matrix)
+;(trace check_surroundings)
+;(trace check_surroundings)
+;(trace check_ring)
+;(princ (check_ring (list '5 '6)))
