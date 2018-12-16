@@ -31,9 +31,7 @@
 ; functions helpers
 
 (defun get_mat_dim (mat)
-  (cond
-    ((null mat) '())
-    (t (1+ (floor (length mat) 2)))))
+  (floor (1+ (length mat)) 2))
 
 (defun get_row (row)
   (cond
