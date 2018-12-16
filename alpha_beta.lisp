@@ -36,7 +36,7 @@
              (get_min_move board (cdr poss_moves) alpha beta depth player)))))) ; else
 
 (defun terminal_node (board)
-  '())
+  (equalp 0 (length (possible_moves board))))
 
 
 (defun evaluate_board (board)

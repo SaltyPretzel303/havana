@@ -5,18 +5,21 @@
 
 (defun negamax(board depth alpha beta player)
 	(cond 
-		((or (= depth 0) (terminal_node board)) (get_eval board player))
-		(t (get_max_move (possible_moves board player) alpha beta depth player))))
+		((or (= depth 0) (terminal_node (cdr board)) (get_eval board player))
+		(t (get_max_move board (possible_moves (cdr board)) alpha beta depth player)))))
 
-(defun get_max_move (poss_moves alpha beta depth player)
+(defun get_max_move (board poss_moves alpha beta depth player)
 	(cond
 		((null poss_moves) alpha)
 		(t (let (
-             (alpha (max alpha (- negamax (car poss_moves) (1- depth) (- beta) (- alpha) (next_player player)))))
+             (alpha (max alpha (- negamax (next_state (cdr board) player (caar poss_moves) (cadar poss_moves)) (1- depth) (- beta) (- alpha) (next_player player)))))
          (if (>= alpha beta)
            alpha ; if true
            (get_max_move (cdr poss_moves) alpha beta depth player) ; else
            )))))
+
+(defun terminal_node (board)
+  (equalp 0 (length (possible_moves board))))
 
 (defun max (a b)
   (if (> (car a) (car b))
@@ -25,4 +28,4 @@
 
 (defun get_eval (board player)
 	(cond ((equalp player #\X) (evaluate_board board))
-		(t (- evaluate_board board))))
+		(t (- (evaluate_board board)))))
