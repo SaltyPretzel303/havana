@@ -7,13 +7,14 @@
 ; board -> (playedField (rest of the regular board representation))
 (defun alpha_beta(board alpha beta depth player)
          (cond
-           ((or (= depth 0) (terminal_node board)) (evaluate_board board)) ; terminal_node -> no more valid moves
+           ((or (= depth 0) (terminal_node (cdr board))) (evaluate_board board)) ; terminal_node -> no more valid moves
            (t (cond
                ((equalp player #\X)
                 ; (cdr board) is just the board without first element (which is played field)
                 (progn (get_max_move board (possible_moves (cdr board)) alpha beta depth player)))
                ((equalp player #\O)
                 (progn (get_min_move board (possible_moves (cdr board)) alpha beta depth player)))))))
+
 
 ; board -> (playedField (rest of the board))
 (defun get_max_move (board poss_moves alpha beta depth player)
