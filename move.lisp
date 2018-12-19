@@ -73,6 +73,7 @@
 ; ==============================================================================
 
 (defun compute_next_move (player)
-       (alpha_beta (list '0 '0) (list -999 (list 0 0)) (list 999 (list 0 0)) 3 player)) ; alpha_beta (curr_move, alpha, beta, depth, player)
+       (alpha_beta (list '0 '0) (list -999 (list 0 0)) (list 999 (list 0 0)) 2 player)) ; alpha_beta (curr_move, alpha, beta, depth, pla0312n
+
        ; returned move format (evaluation (row column))
        ; board -> ( fakePlayed (rest of the fields) )
