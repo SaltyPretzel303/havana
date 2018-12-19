@@ -46,14 +46,12 @@
 (defun terminal_node ()
   (equalp 0 (length (possible_moves))))
 
-
 (defun evaluate_board (curr_move player)
-  (let* (
+  (let (
           (ret_value (list '0 (list curr_move)))
           (bridge (check_bridge (next_player player)))
           (fork (check_fork curr_move))
           (ring (check_ring curr_move)))
-          ;K (p (princ (list bridge fork ring))))
       (if (or bridge fork ring)
          (if (equalp player #\X)
           (list '-999 (list curr_move))
