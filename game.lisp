@@ -33,7 +33,7 @@
                                     (progn ; bridge created, end game
                                       (screen:clear-window (screen:make-window))
                                       (print_matrix)
-                                      (mapcar 'princ (list "Game finished" #\linefeed "Winer is: " symbol #\linefeed "Reason: "))
+                                      (mapcar 'princ (list "Game finished" #\linefeed "Winner is: " symbol #\linefeed "Reason: "))
                                       (cond
                                         ((not (null bridge_created)) (princ "bridge"))
                                         ((not (null fork_created)) (princ "fork"))

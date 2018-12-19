@@ -38,14 +38,14 @@
          (new_state (cons (list row column) new_state))) ; adds played coordinats before first row
     new_state))
 
+(defun undo_move (row column)
+  (setf (cadr (get_element row column)) #\-))
+
 ; ==============================================================================
 
 ; traverse matrix and sends each row to traverse_row
-(defun possible_moves (board)
-  (cond ((null board) '())
-    (t (append
-        (traverse_row (caar board) (cadar board))
-        (possible_moves (cdr board))))))
+(defun possible_moves ()
+    (traverse_matrix matrix))
 
 (defun traverse_matrix (rows)
   (cond
@@ -73,6 +73,6 @@
 ; ==============================================================================
 
 (defun compute_next_move (player)
-       (alpha_beta (cons (list 0 0) matrix) (list -999 (list 0 0)) (list 999 (list 0 0)) 3 player)) ; alpha_beta (board, alpha, beta, depth, player)
+       (alpha_beta (list '0 '0) (list -999 (list 0 0)) (list 999 (list 0 0)) 3 player)) ; alpha_beta (curr_move, alpha, beta, depth, player)
        ; returned move format (evaluation (row column))
        ; board -> ( fakePlayed (rest of the fields) )
